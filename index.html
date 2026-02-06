@@ -134,6 +134,15 @@ th{
     overflow: hidden;
 }
 
+/* hasil regresi - ukuran tulisan y=a+bx */
+#hasil {
+    font-size: 2em; /* Ubah nilai ini untuk ukuran font yang diinginkan */
+    font-weight: bold;
+    color: #ff2f92;
+    text-align: center;
+    margin: 10px 0;
+}
+
 /* imut */
 .emoji{
     font-size:1.2em;
@@ -194,6 +203,10 @@ th{
         margin-top: 10px;
         font-size: 1.1em;
     }
+    /* ukuran tulisan hasil regresi di mobile */
+    #hasil {
+        font-size: 1.8em; /* Lebih besar di tablet */
+    }
 }
 
 @media(max-width:480px){
@@ -219,6 +232,10 @@ th{
     input{
         font-size:16px;
         padding:12px;
+    }
+    /* ukuran tulisan hasil regresi di layar kecil */
+    #hasil {
+        font-size: 1.6em; /* Sesuai layar kecil */
     }
 }
 </style>
@@ -271,7 +288,7 @@ th{
 
 <br><br>
 
-<input type="checkbox" id="showRegression" checked>
+<input type="checkbox" id="showRegression">
 <label for="showRegression">Munculkan Garis Regresi</label>
 
 <br><br>
@@ -287,9 +304,6 @@ th{
 let chart, a, b;
 let dataX = [], dataY = [];
 let ekstrapolasiData = [];
-
-// Pastikan checkbox tercentang secara default
-document.getElementById("showRegression").checked = true;
 
 function hitung(){
     if(dataX.length < 2 || dataY.length < 2 || dataX.length !== dataY.length){
@@ -390,12 +404,12 @@ function hitung(){
                         pointRadius: 0
                     }
                 ] : []),
-                {
+                ...(ekstrapolasiData.length > 0 ? [{
                     label: "Ekstrapolasi 💛",
                     data: ekstrapolasiData,
                     backgroundColor: "#FFFF00",
                     pointRadius: 6
-                }
+                }] : [])
             ]
         },
         options: {

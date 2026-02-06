@@ -5,40 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Regresi Linier</title>
 
-<!-- Google Font imut -->
+<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-}
-
+*{box-sizing:border-box;}
 body{
     margin:0;
     font-family:'Quicksand',sans-serif;
-    background:
-        radial-gradient(circle at top left,#ff9acb,#ff5fa2,#ff2f92);
+    background:radial-gradient(circle at top left,#ff9acb,#ff5fa2,#ff2f92);
     color:#333;
 }
-
-/* background futuristik */
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    background:
-        repeating-linear-gradient(
-            45deg,
-            rgba(255,255,255,.06) 0,
-            rgba(255,255,255,.06) 2px,
-            transparent 2px,
-            transparent 10px
-        );
+    background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0, rgba(255,255,255,.06) 2px, transparent 2px, transparent 10px);
     pointer-events:none;
 }
-
 .overlay{
     min-height:100vh;
     padding:20px;
@@ -49,194 +35,48 @@ body::before{
     margin:20px auto;
     box-shadow:0 20px 45px rgba(0,0,0,.25);
 }
-
-/* judul lucu */
-h2{
-    text-align:center;
-    color:#ff2f92;
-    margin-bottom:5px;
-}
-.subjudul{
-    text-align:center;
-    font-weight:600;
-    margin-bottom:25px;
-    font-size: 1.9em;
-    font-weight: bold;
-}
-.subjudul::after{
-    content:" 📈";
-}
-
-label{
-    font-weight:600;
-}
-
-input{
-    width:18%;
-    padding:10px;
-    border-radius:12px;
-    border:1px solid #ccc;
-    font-family:'Quicksand',sans-serif;
-}
-
+h2{text-align:center;color:#ff2f92;margin-bottom:5px;}
+.subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.9em;}
+.subjudul::after{content:" 📈";}
+label{font-weight:600;}
+input{width:18%;padding:10px;border-radius:12px;border:1px solid #ccc;font-family:'Quicksand',sans-serif;}
 button{
-    background:#ff5fa2;
-    color:white;
-    border:none;
-    padding:12px 18px;
-    border-radius:14px;
-    cursor:pointer;
-    font-weight:700;
-    box-shadow:0 6px 15px rgba(255,95,162,.5);
+    background:#ff5fa2;color:white;border:none;padding:12px 18px;border-radius:14px;
+    cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(255,95,162,.5);
     transition: background 0.3s;
 }
-button:hover{
-    background:#ff2f92;
-}
-
-/* tabel - diperbesar ukuran font dan padding untuk ukuran tabel dan angka lebih besar */
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
-    background:white;
-    border-radius:14px;
-    overflow:hidden;
-    font-size: 1.5em;
-}
-th,td{
-    padding:10px;
-    border:1px solid #ddd;
-    text-align:center;
-}
-th{
-    background:#ffe0ef;
-    font-size: 1.2em;
-}
-
-/* kartu section */
-.section{
-    margin-top:25px;
-    padding:18px;
-    background:#fff;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
-
-/* grafik */
-#grafik-container{
-    width:100%;
-    padding:12px;
-    background:black;
-    border-radius:18px;
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-    transform-origin:top left;
-    overflow: hidden;
-}
-
-/* hasil regresi - ukuran tulisan y=a+bx */
-#hasil {
-    font-size: 2em; /* Ubah nilai ini untuk ukuran font yang diinginkan */
-    font-weight: bold;
-    color: #ff2f92;
-    text-align: center;
-    margin: 10px 0;
-}
-
-/* imut */
-.emoji{
-    font-size:1.2em;
-}
-
-/* mobile responsiveness - diperbesar lebih untuk versi mobile */
+button:hover{background:#ff2f92;}
+table{width:100%;border-collapse:collapse;margin-top:15px;background:white;border-radius:14px;overflow:hidden;font-size:1.5em;}
+th,td{padding:10px;border:1px solid #ddd;text-align:center;}
+th{background:#ffe0ef;font-size:1.2em;}
+.section{margin-top:25px;padding:18px;background:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.12);}
+#grafik-container{width:100%;padding:12px;background:black;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.25);transform-origin:top left;overflow: hidden;}
+#hasil{font-size: 2em;font-weight: bold;color: #ff2f92;text-align: center;margin: 10px 0;}
 @media(max-width:768px){
-    .overlay{
-        margin:10px;
-        padding:15px;
-    }
-    h2{
-        font-size:1.4em;
-    }
-    .subjudul{
-        font-size:1.5em;
-    }
-    input{
-        width:100%;
-        margin-bottom:10px;
-        font-size:18px;
-        display: block;
-    }
-    button{
-        width:100%;
-        padding:18px;
-        font-size:1.2em;
-    }
-    table{
-        font-size:1.4em;
-        overflow-x: auto;
-        display: block;
-        white-space: nowrap;
-    }
-    th,td{
-        padding:12px;
-    }
-    .section{
-        padding:20px;
-    }
-    #grafik-container{
-        padding:10px;
-    }
-    .section input[type="number"]{
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    .section button{
-        margin-top: 10px;
-    }
-    input[type="range"]{
-        width: 100%;
-        height: 10px;
-    }
-    label[for="showRegression"]{
-        display: block;
-        margin-top: 10px;
-        font-size: 1.1em;
-    }
-    /* ukuran tulisan hasil regresi di mobile */
-    #hasil {
-        font-size: 1.8em; /* Lebih besar di tablet */
-    }
+    .overlay{margin:10px;padding:15px;}
+    h2{font-size:1.4em;}
+    .subjudul{font-size:1.5em;}
+    input{width:100%;margin-bottom:10px;font-size:18px;display: block;}
+    button{width:100%;padding:18px;font-size:1.2em;}
+    table{font-size:1.4em;overflow-x:auto;display:block;white-space:nowrap;}
+    th,td{padding:12px;}
+    .section{padding:20px;}
+    #grafik-container{padding:10px;}
+    .section input[type="number"]{display:block;width:100%;margin-bottom:10px;}
+    .section button{margin-top:10px;}
+    input[type="range"]{width:100%;height:10px;}
+    label[for="showRegression"]{display:block;margin-top:10px;font-size:1.1em;}
+    #hasil{font-size:1.8em;}
 }
-
 @media(max-width:480px){
-    h2{
-        font-size:1.2em;
-    }
-    .subjudul{
-        font-size:1.3em;
-    }
-    table{
-        font-size:1.3em;
-    }
-    th,td{
-        padding:10px;
-    }
-    .section{
-        padding:15px;
-    }
-    button{
-        padding:15px;
-        font-size:1.1em;
-    }
-    input{
-        font-size:16px;
-        padding:12px;
-    }
-    /* ukuran tulisan hasil regresi di layar kecil */
-    #hasil {
-        font-size: 1.6em; /* Sesuai layar kecil */
-    }
+    h2{font-size:1.2em;}
+    .subjudul{font-size:1.3em;}
+    table{font-size:1.3em;}
+    th,td{padding:10px;}
+    .section{padding:15px;}
+    button{padding:15px;font-size:1.1em;}
+    input{font-size:16px;padding:12px;}
+    #hasil{font-size:1.6em;}
 }
 </style>
 </head>
@@ -256,6 +96,8 @@ th{
 <div id="tabelPoin"></div>
 <br>
 <button onclick="hitung()">✨ Hitung Regresi ✨</button>
+<br><br>
+<button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua Data</button>
 </div>
 
 <div class="section">
@@ -306,149 +148,6 @@ let dataX = [], dataY = [];
 let ekstrapolasiData = [];
 let minX, maxX, minY, maxY, stepSizeX, stepSizeY;
 
-function hitung(){
-    if(dataX.length < 2 || dataY.length < 2 || dataX.length !== dataY.length){
-        alert("Tambahkan minimal 2 poin data ya! 💕");
-        return;
-    }
-
-    let x = [...dataX];
-    let y = [...dataY];
-    let n = x.length;
-
-    let sumX = 0, sumY = 0, sumX2 = 0, sumXY = 0;
-    let tabel = `
-    <table>
-    <tr>
-        <th>No</th><th>x</th><th>y</th><th>x²</th><th>xy</th>
-    </tr>`;
-
-    for(let i = 0; i < n; i++){
-        let x2 = x[i] * x[i];
-        let xy = x[i] * y[i];
-        sumX += x[i]; sumY += y[i];
-        sumX2 += x2; sumXY += xy;
-
-        tabel += `
-        <tr>
-            <td>${i+1}</td>
-            <td>${x[i]}</td>
-            <td>${y[i]}</td>
-            <td>${x2}</td>
-            <td>${xy}</td>
-        </tr>`;
-    }
-
-    tabel += `
-    <tr>
-        <th>Σ</th>
-        <th>${sumX}</th>
-        <th>${sumY}</th>
-        <th>${sumX2}</th>
-        <th>${sumXY}</th>
-    </tr>
-    </table>`;
-
-    document.getElementById("tabel").innerHTML = tabel;
-
-    b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    a = (sumY - b * sumX) / n;
-
-    document.getElementById("hasil").innerHTML =
-        `✨ <b>y = ${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
-
-    let tabelR = `<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
-    let titikRegresi = [];
-
-    for(let i = 0; i < n; i++){
-        let yr = a + b * x[i];
-        tabelR += `<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
-        titikRegresi.push({x: x[i], y: yr});
-    }
-    tabelR += `</table>`;
-    document.getElementById("tabelRegresi").innerHTML = tabelR;
-
-    let scatterData = x.map((v, i) => ({x: v, y: y[i]}));
-    let allX = [...x, ...ekstrapolasiData.map(p => p.x)];
-    let allY = [...y, ...ekstrapolasiData.map(p => p.y)];
-    minX = Math.min(...allX);
-    maxX = Math.max(...allX);
-    minY = Math.min(...allY);
-    maxY = Math.max(...allY);
-    stepSizeX = Math.max(1, Math.round((maxX - minX) / 30)); // Base 30 ticks untuk lebih banyak grid
-    stepSizeY = Math.max(1, Math.round((maxY - minY) / 30));
-    let showReg = document.getElementById("showRegression").checked;
-
-    if(chart) chart.destroy();
-    chart = new Chart(document.getElementById("grafik"), {
-        type: "scatter",
-        data: {
-            datasets: [
-                {
-                    label: "Data Asli 💙",
-                    data: scatterData,
-                    backgroundColor: "#3b82f6",
-                    pointRadius: 6
-                },
-                ...(showReg ? [
-                    {
-                        label: "Titik Regresi 💚",
-                        data: titikRegresi,
-                        backgroundColor: "#22c55e",
-                        pointRadius: 6
-                    },
-                    {
-                        label: "Garis Regresi 🤍",
-                        type: "line",
-                        data: [
-                            {x: minX, y: a + b * minX},
-                            {x: maxX, y: a + b * maxX}
-                        ],
-                        borderColor: "#FFFFFF",
-                        backgroundColor: "#FFFFFF",
-                        borderWidth: 2,
-                        pointRadius: 0
-                    }
-                ] : []),
-                ...(ekstrapolasiData.length > 0 ? [{
-                    label: "Ekstrapolasi 💛",
-                    data: ekstrapolasiData,
-                    backgroundColor: "#FFFF00",
-                    pointRadius: 6
-                }] : [])
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    grid: {
-                        color: 'white'
-                    },
-                    ticks: {
-                        stepSize: stepSizeX,
-                        callback: function(value) {
-                            return Math.round(value); // Round to integer, no decimals
-                        }
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'white'
-                    },
-                    ticks: {
-                        stepSize: stepSizeY,
-                        callback: function(value) {
-                            return Math.round(value); // Round to integer, no decimals
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
 function tambahPoin(){
     let x = Number(document.getElementById("xPoin").value);
     let y = Number(document.getElementById("yPoin").value);
@@ -463,96 +162,143 @@ function tambahPoin(){
     document.getElementById("yPoin").value = "";
 }
 
-function hapusPoin(index){
-    dataX.splice(index, 1);
-    dataY.splice(index, 1);
-    updateTabelPoin();
-    // Reset semua langkah berikutnya tergantung pada jumlah poin tersisa
-    if(dataX.length >= 2){
-        hitung(); // Hitung ulang regresi jika masih >=2 poin
-    } else {
-        // Jika kurang dari 2 poin, reset semua tabel dan grafik
-        document.getElementById("tabel").innerHTML = "";
-        document.getElementById("hasil").innerHTML = "";
-        document.getElementById("tabelRegresi").innerHTML = "";
-        ekstrapolasiData = []; // Reset ekstrapolasi juga
-        updateTabelEkstra();
-        if(chart) chart.destroy();
-    }
-}
-
 function updateTabelPoin(){
     let tabel = `<table><tr><th>No</th><th>x</th><th>y</th><th>Aksi</th></tr>`;
-    dataX.forEach((x, index) => {
+    dataX.forEach((x, i) => {
         tabel += `<tr>
-            <td>${index + 1}</td>
+            <td>${i+1}</td>
             <td>${x}</td>
-            <td>${dataY[index]}</td>
-            <td><button onclick="hapusPoin(${index})" style="background:#ff2f92; color:white; border:none; padding:5px 10px; border-radius:5px;">Hapus</button></td>
+            <td>${dataY[i]}</td>
+            <td><button onclick="hapusPoin(${i})" style="background:#ff2f92;color:white;border:none;padding:5px 10px;border-radius:5px;">Hapus</button></td>
         </tr>`;
     });
     tabel += `</table>`;
     document.getElementById("tabelPoin").innerHTML = tabel;
 }
 
-function tambahkanEkstra(){
-    if(!a || !b){
-        alert("Hitung regresi dulu ya! 💕");
-        return;
+function hapusPoin(i){
+    dataX.splice(i,1);
+    dataY.splice(i,1);
+    updateTabelPoin();
+    if(dataX.length>=2) hitung();
+    else{
+        document.getElementById("tabel").innerHTML="";
+        document.getElementById("tabelRegresi").innerHTML="";
+        document.getElementById("hasil").innerHTML="";
+        ekstrapolasiData=[];
+        updateTabelEkstra();
+        if(chart){chart.destroy(); chart=null;}
     }
-    let x = Number(document.getElementById("xEkstra").value);
-    if(isNaN(x)){
-        alert("Masukkan nilai x yang valid! 🌸");
-        return;
-    }
-    let y = a + b * x;
-    ekstrapolasiData.push({x: x, y: y});
-    updateTabelEkstra();
-    hitung();
-    document.getElementById("xEkstra").value = "";
 }
 
-function hapusEkstra(index){
-    ekstrapolasiData.splice(index, 1);
+function hitung(){
+    if(dataX.length<2){alert("Tambahkan minimal 2 poin data ya! 💕"); return;}
+    let x=[...dataX], y=[...dataY], n=x.length;
+    let sumX=0,sumY=0,sumX2=0,sumXY=0;
+    let tabel=`<table><tr><th>No</th><th>x</th><th>y</th><th>x²</th><th>xy</th></tr>`;
+    for(let i=0;i<n;i++){
+        let x2=x[i]*x[i], xy=x[i]*y[i];
+        sumX+=x[i]; sumY+=y[i]; sumX2+=x2; sumXY+=xy;
+        tabel+=`<tr><td>${i+1}</td><td>${x[i]}</td><td>${y[i]}</td><td>${x2}</td><td>${xy}</td></tr>`;
+    }
+    tabel+=`<tr><th>Σ</th><th>${sumX}</th><th>${sumY}</th><th>${sumX2}</th><th>${sumXY}</th></tr></table>`;
+    document.getElementById("tabel").innerHTML=tabel;
+
+    b=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+    a=(sumY-b*sumX)/n;
+    document.getElementById("hasil").innerHTML=`✨ <b>y=${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
+
+    let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
+    let titikRegresi=[];
+    for(let i=0;i<n;i++){
+        let yr=a+b*x[i];
+        tabelR+=`<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
+        titikRegresi.push({x:x[i],y:yr});
+    }
+    tabelR+=`</table>`;
+    document.getElementById("tabelRegresi").innerHTML=tabelR;
+
+    let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
+    let allX=[...x,...ekstrapolasiData.map(p=>p.x)];
+    let allY=[...y,...ekstrapolasiData.map(p=>p.y)];
+    minX=Math.min(...allX); maxX=Math.max(...allX); minY=Math.min(...allY); maxY=Math.max(...allY);
+    stepSizeX=Math.max(1,Math.round((maxX-minX)/30));
+    stepSizeY=Math.max(1,Math.round((maxY-minY)/30));
+    let showReg=document.getElementById("showRegression").checked;
+    if(chart) chart.destroy();
+    chart=new Chart(document.getElementById("grafik"),{
+        type:"scatter",
+        data:{datasets:[
+            {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6",pointRadius:6},
+            ...(showReg?[{label:"Titik Regresi 💚",data:titikRegresi,backgroundColor:"#22c55e",pointRadius:6},
+            {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],
+             borderColor:"#FFFFFF",backgroundColor:"#FFFFFF",borderWidth:2,pointRadius:0}]:[]),
+            ...(ekstrapolasiData.length>0?[{label:"Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}]:[])
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,
+            scales:{x:{grid:{color:'white'},ticks:{stepSize:stepSizeX,callback:v=>Math.round(v)}},
+                    y:{grid:{color:'white'},ticks:{stepSize:stepSizeY,callback:v=>Math.round(v)}}}
+        }
+    });
+}
+
+function tambahkanEkstra(){
+    if(!a || !b){alert("Hitung regresi dulu ya! 💕"); return;}
+    let x=Number(document.getElementById("xEkstra").value);
+    if(isNaN(x)){alert("Masukkan nilai x yang valid! 🌸"); return;}
+    let y=a+b*x;
+    ekstrapolasiData.push({x:x,y:y});
     updateTabelEkstra();
     hitung();
+    document.getElementById("xEkstra").value="";
 }
+
+function hapusEkstra(i){ekstrapolasiData.splice(i,1); updateTabelEkstra(); hitung();}
 
 function updateTabelEkstra(){
-    let tabel = `<table><tr><th>No</th><th>x</th><th>y hasil ekstrapolasi</th><th>Aksi</th></tr>`;
-    ekstrapolasiData.forEach((point, index) => {
-        tabel += `<tr>
-            <td>${index + 1}</td>
-            <td>${point.x}</td>
-            <td>${point.y.toFixed(3)}</td>
-            <td><button onclick="hapusEkstra(${index})" style="background:#ff2f92; color:white; border:none; padding:5px 10px; border-radius:5px;">Hapus</button></td>
-        </tr>`;
+    let tabel=`<table><tr><th>No</th><th>x</th><th>y hasil ekstrapolasi</th><th>Aksi</th></tr>`;
+    ekstrapolasiData.forEach((p,i)=>{
+        tabel+=`<tr><td>${i+1}</td><td>${p.x}</td><td>${p.y.toFixed(3)}</td><td><button onclick="hapusEkstra(${i})" style="background:#ff2f92;color:white;border:none;padding:5px 10px;border-radius:5px;">Hapus</button></td></tr>`;
     });
-    tabel += `</table>`;
-    document.getElementById("tabelEkstra").innerHTML = tabel;
+    tabel+=`</table>`;
+    document.getElementById("tabelEkstra").innerHTML=tabel;
 }
 
-const slider = document.getElementById("zoomSlider");
-const container = document.getElementById("grafik-container");
-const zoomValue = document.getElementById("zoomValue");
+const slider=document.getElementById("zoomSlider");
+const container=document.getElementById("grafik-container");
+const zoomValue=document.getElementById("zoomValue");
 
-slider.oninput = () => {
-    let s = slider.value / 100;
-    container.style.transform = `scale(${s})`;
-    zoomValue.innerText = slider.value + "%";
-    // Update grid density based on zoom - lebih agresif untuk lebih banyak grid, rounded to integer
-    if(chart && minX !== undefined && maxX !== undefined && minY !== undefined && maxY !== undefined){
-        let zoomFactor = s * 3; // Dikalikan 3 untuk lebih agresif lagi, sehingga grid lebih banyak saat zoom
-        let newStepX = Math.max(1, Math.round(stepSizeX / zoomFactor));
-        let newStepY = Math.max(1, Math.round(stepSizeY / zoomFactor));
-        chart.options.scales.x.ticks.stepSize = newStepX;
-        chart.options.scales.y.ticks.stepSize = newStepY;
+slider.oninput=()=>{
+    let s=slider.value/100;
+    container.style.transform=`scale(${s})`;
+    zoomValue.innerText=slider.value+"%";
+    if(chart && minX!==undefined && maxX!==undefined && minY!==undefined && maxY!==undefined){
+        let zoomFactor=s*3;
+        chart.options.scales.x.ticks.stepSize=Math.max(1,Math.round(stepSizeX/zoomFactor));
+        chart.options.scales.y.ticks.stepSize=Math.max(1,Math.round(stepSizeY/zoomFactor));
         chart.update();
     }
 };
 
-document.getElementById("showRegression").addEventListener("change", hitung);
-</script>
+document.getElementById("showRegression").addEventListener("change",hitung);
 
+// ======= FUNGSI RESET =======
+function resetSemua(){
+    dataX=[]; dataY=[]; ekstrapolasiData=[]; a=undefined; b=undefined;
+    document.getElementById("xPoin").value="";
+    document.getElementById("yPoin").value="";
+    document.getElementById("xEkstra").value="";
+    document.getElementById("tabelPoin").innerHTML="";
+    document.getElementById("tabel").innerHTML="";
+    document.getElementById("tabelRegresi").innerHTML="";
+    document.getElementById("tabelEkstra").innerHTML="";
+    document.getElementById("hasil").innerHTML="";
+    document.getElementById("showRegression").checked=false;
+    document.getElementById("zoomSlider").value=50;
+    document.getElementById("zoomValue").innerText="50%";
+    container.style.transform="scale(0.5)";
+    if(chart){chart.destroy(); chart=null;}
+}
+</script>
 </body>
 </html>

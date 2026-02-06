@@ -17,6 +17,7 @@ body{
     font-family:'Quicksand',sans-serif;
     background:radial-gradient(circle at top left,#ff9acb,#ff5fa2,#ff2f92);
     color:#333;
+    overflow-x: hidden;
 }
 body::before{
     content:"";
@@ -25,15 +26,76 @@ body::before{
     background:repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0, rgba(255,255,255,.06) 2px, transparent 2px, transparent 10px);
     pointer-events:none;
 }
-.overlay{
-    min-height:100vh;
-    padding:20px;
-    background:rgba(255,255,255,.92);
-    backdrop-filter:blur(8px);
-    border-radius:22px;
-    max-width:1100px;
-    margin:20px auto;
-    box-shadow:0 20px 45px rgba(0,0,0,.25);
+
+/* Landing Page Styles */
+#landing-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#landing-page.hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+}
+#landing-page h1 {
+    font-size: 4em;
+    color: #ff2f92;
+    margin-bottom: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+#landing-page h1:hover {
+    color: #ff5fa2;
+}
+#landing-page p {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    max-width: 600px;
+}
+#landing-page button {
+    background: #ff5fa2;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2em;
+    box-shadow: 0 6px 15px rgba(255, 95, 162, 0.5);
+    transition: background 0.3s, transform 0.2s;
+}
+#landing-page button:hover {
+    background: #ff2f92;
+    transform: scale(1.05);
+}
+
+/* Main Page Styles */
+.overlay {
+    min-height: 100vh;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 22px;
+    max-width: 1100px;
+    margin: 20px auto;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+    display: none; /* Hidden initially */
+}
+.overlay.show {
+    display: block;
 }
 h2{text-align:center;color:#ff2f92;margin-bottom:5px;}
 .subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.9em;}
@@ -82,67 +144,79 @@ th{background:#ffe0ef;font-size:1.2em;}
 </head>
 
 <body>
-<div class="overlay">
-
-<h2>Perhitungan Regresi Linier</h2>
-<div class="subjudul">DONI STIAWAN, S.MAT</div>
-
-<div class="section">
-<h3>📊 Tambah Poin Data</h3>
-<input type="number" id="xPoin" placeholder="Masukkan nilai x">
-<input type="number" id="yPoin" placeholder="Masukkan y">
-<br><br>
-<button onclick="tambahPoin()">➕ Tambah Poin</button>
-<div id="tabelPoin"></div>
-<br>
-<button onclick="hitung()">✨ Hitung Regresi ✨</button>
-<br><br>
-<button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua Data</button>
+<!-- Landing Page -->
+<div id="landing-page">
+    <h1 onclick="enterApp()">Regresi Linier</h1>
+    <p>Cinta bukanlah ilmu matematika. Tidak perlu penjelasan rasional dan rumus untuk menjabarkannya</p>
 </div>
 
-<div class="section">
-<h3>📊 Tabel Perhitungan</h3>
-<div id="tabel"></div>
-</div>
+<!-- Main Application Page -->
+<div class="overlay" id="main-page">
+    <h2>Perhitungan Regresi Linier</h2>
+    <div class="subjudul">DONI STIAWAN, S.MAT</div>
 
-<div class="section">
-<h3>💡 Hasil Regresi</h3>
-<p id="hasil"></p>
-</div>
+    <div class="section">
+    <h3>📊 Tambah Poin Data</h3>
+    <input type="number" id="xPoin" placeholder="Masukkan nilai x">
+    <input type="number" id="yPoin" placeholder="Masukkan y">
+    <br><br>
+    <button onclick="tambahPoin()">➕ Tambah Poin</button>
+    <div id="tabelPoin"></div>
+    <br>
+    <button onclick="hitung()">✨ Hitung Regresi ✨</button>
+    <br><br>
+    <button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua Data</button>
+    </div>
 
-<div class="section">
-<h3>📈 Tabel Nilai Regresi (Interpolasi)</h3>
-<div id="tabelRegresi"></div>
-</div>
+    <div class="section">
+    <h3>📊 Tabel Perhitungan</h3>
+    <div id="tabel"></div>
+    </div>
 
-<div class="section">
-<h3>🔮 Ekstrapolasi</h3>
-<input type="number" id="xEkstra" placeholder="Masukkan x">
-<br><br>
-<button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
-<div id="tabelEkstra"></div>
-</div>
+    <div class="section">
+    <h3>💡 Hasil Regresi</h3>
+    <p id="hasil"></p>
+    </div>
 
-<div class="section">
-<label>🔍 Zoom Grafik:</label>
-<input type="range" min="50" max="150" value="50" id="zoomSlider">
-<span id="zoomValue">50%</span>
+    <div class="section">
+    <h3>📈 Tabel Nilai Regresi (Interpolasi)</h3>
+    <div id="tabelRegresi"></div>
+    </div>
 
-<br><br>
+    <div class="section">
+    <h3>🔮 Ekstrapolasi</h3>
+    <input type="number" id="xEkstra" placeholder="Masukkan x">
+    <br><br>
+    <button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
+    <div id="tabelEkstra"></div>
+    </div>
 
-<input type="checkbox" id="showRegression">
-<label for="showRegression">Munculkan Garis Regresi</label>
+    <div class="section">
+    <label>🔍 Zoom Grafik:</label>
+    <input type="range" min="50" max="150" value="50" id="zoomSlider">
+    <span id="zoomValue">50%</span>
 
-<br><br>
+    <br><br>
 
-<div id="grafik-container">
-<canvas id="grafik" height="320"></canvas>
-</div>
-</div>
+    <input type="checkbox" id="showRegression">
+    <label for="showRegression">Munculkan Garis Regresi</label>
 
+    <br><br>
+
+    <div id="grafik-container">
+    <canvas id="grafik" height="320"></canvas>
+    </div>
+    </div>
 </div>
 
 <script>
+// Function to enter the app
+function enterApp() {
+    document.getElementById('landing-page').classList.add('hidden');
+    document.getElementById('main-page').classList.add('show');
+}
+
+// Rest of the script remains the same
 let chart, a, b;
 let dataX = [], dataY = [];
 let ekstrapolasiData = [];

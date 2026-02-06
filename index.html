@@ -60,9 +60,11 @@ h2{
     text-align:center;
     font-weight:600;
     margin-bottom:25px;
+    font-size: 1.9em; /* Ditambahkan: Ukuran font lebih besar */
+    font-weight: bold; /* Ditambahkan: Lebih tebal untuk tampilan besar */
 }
 .subjudul::after{
-    content:" 💖📈✨";
+    content:" 📈";
 }
 
 label{
@@ -70,7 +72,7 @@ label{
 }
 
 input{
-    width:100%;
+    width:18%;
     padding:10px;
     border-radius:12px;
     border:1px solid #ccc;
@@ -145,19 +147,16 @@ th{
 <div class="overlay">
 
 <h2>Perhitungan Regresi Linier</h2>
-<div class="subjudul">Doni Stiawan, S.Mat</div>
+<div class="subjudul">DONI STIAWAN, S.MAT</div>  <!-- Diubah: Nama menjadi huruf besar -->
 
 <div class="section">
-<label>Data X (pisahkan dengan koma):</label>
-<input id="dataX" placeholder="contoh: 2,4,6,8">
-
+<h3>📊 Tambah Poin Data</h3>
+<input type="number" id="xPoin" placeholder="Masukkan nilai x">
+<input type="number" id="yPoin" placeholder="Masukkan y">
 <br><br>
-
-<label>Data Y (pisahkan dengan koma):</label>
-<input id="dataY" placeholder="contoh: 5,9,13,17">
-
-<br><br>
-
+<button onclick="tambahPoin()">➕ Tambah Poin</button>
+<div id="tabelPoin"></div>  <!-- Tabel poin data -->
+<br>
 <button onclick="hitung()">✨ Hitung Regresi ✨</button>
 </div>
 
@@ -180,14 +179,20 @@ th{
 <h3>🔮 Ekstrapolasi</h3>
 <input type="number" id="xEkstra" placeholder="Masukkan x">
 <br><br>
-<button onclick="ekstrapolasi()">Hitung y</button>
-<p id="hasilEkstra"></p>
+<button onclick="tambahEkstra()">➕ Tambah Ekstrapolasi</button>
+<div id="tabelEkstra"></div>  <!-- Tabel akan muncul di sini -->
 </div>
 
 <div class="section">
 <label>🔍 Zoom Grafik:</label>
-<input type="range" min="50" max="200" value="50" id="zoomSlider">
+<input type="range" min="50" max="150" value="100" id="zoomSlider">
 <span id="zoomValue">100%</span>
+
+<br><br>
+
+<!-- Checkbox untuk toggle garis regresi -->
+<input type="checkbox" id="showRegression" checked>
+<label for="showRegression">Munculkan Garis Regresi</label>
 
 <br><br>
 
@@ -200,16 +205,18 @@ th{
 
 <script>
 let chart, a, b;
+let dataX = [], dataY = [];  // Array global untuk data X dan Y
+let ekstrapolasiData = [];  // Array untuk ekstrapolasi
 
 function hitung(){
-    let x = document.getElementById("dataX").value.split(",").map(Number);
-    let y = document.getElementById("dataY").value.split(",").map(Number);
-    let n = x.length;
-
-    if(n < 2 || n !== y.length){
-        alert("Data X dan Y harus sama jumlahnya ya 💕");
+    if(dataX.length < 2 || dataY.length < 2 || dataX.length !== dataY.length){
+        alert("Tambahkan minimal 2 poin data ya! 💕");
         return;
     }
+
+    let x = [...dataX];
+    let y = [...dataY];
+    let n = x.length;
 
     let sumX = 0, sumY = 0, sumX2 = 0, sumXY = 0;
     let tabel = `
@@ -265,6 +272,14 @@ function hitung(){
 
     let scatterData = x.map((v, i) => ({x: v, y: y[i]}));
 
+    // Gabungkan semua x untuk garis regresi yang tersambung
+    let allX = [...x, ...ekstrapolasiData.map(p => p.x)];
+    let minX = Math.min(...allX);
+    let maxX = Math.max(...allX);
+
+    // Ambil status checkbox
+    let showReg = document.getElementById("showRegression").checked;
+
     if(chart) chart.destroy();
     chart = new Chart(document.getElementById("grafik"), {
         type: "scatter",
@@ -274,24 +289,33 @@ function hitung(){
                     label: "Data Asli 💙",
                     data: scatterData,
                     backgroundColor: "#3b82f6",
-                    pointRadius: 10  // Ukuran titik data asli diperbesar
+                    pointRadius: 6
                 },
                 {
                     label: "Titik Regresi 💚",
                     data: titikRegresi,
                     backgroundColor: "#22c55e",
-                    pointRadius: 10  // Ukuran titik regresi diperbesar
+                    pointRadius: 6
                 },
                 {
-                    label: "Garis Regresi ❤️",
+                    label: "Ekstrapolasi 💛",
+                    data: ekstrapolasiData,
+                    backgroundColor: "#FFFF00",
+                    pointRadius: 6
+                },
+                // Dataset garis regresi hanya ditampilkan jika checkbox checked
+                ...(showReg ? [{
+                    label: "Garis Regresi 🤍",
                     type: "line",
                     data: [
-                        {x: Math.min(...x), y: a + b * Math.min(...x)},
-                        {x: Math.max(...x), y: a + b * Math.max(...x)}
+                        {x: minX, y: a + b * minX},
+                        {x: maxX, y: a + b * maxX}
                     ],
-                    borderColor: "#FFFFFF"
-                    // Garis tidak perlu pointRadius, kecuali jika ingin titik pada garis
-                }
+                    borderColor: "#FFFFFF",
+                    backgroundColor: "#FFFFFF",
+                    borderWidth: 2,
+                    pointRadius: 0
+                }] : [])
             ]
         },
         options: {
@@ -311,11 +335,75 @@ function hitung(){
     });
 }
 
-function ekstrapolasi(){
+function tambahPoin(){
+    let x = Number(document.getElementById("xPoin").value);
+    let y = Number(document.getElementById("yPoin").value);
+    if(isNaN(x) || isNaN(y)){
+        alert("Masukkan nilai x dan y yang valid! 🌸");
+        return;
+    }
+    dataX.push(x);
+    dataY.push(y);
+    updateTabelPoin();
+    document.getElementById("xPoin").value = "";
+    document.getElementById("yPoin").value = "";
+}
+
+function hapusPoin(index){
+    dataX.splice(index, 1);
+    dataY.splice(index, 1);
+    updateTabelPoin();
+}
+
+function updateTabelPoin(){
+    let tabel = `<table><tr><th>No</th><th>x</th><th>y</th><th>Aksi</th></tr>`;
+    dataX.forEach((x, index) => {
+        tabel += `<tr>
+            <td>${index + 1}</td>
+            <td>${x}</td>
+            <td>${dataY[index]}</td>
+            <td><button onclick="hapusPoin(${index})" style="background:#ff2f92; color:white; border:none; padding:5px 10px; border-radius:5px;">Hapus</button></td>
+        </tr>`;
+    });
+    tabel += `</table>`;
+    document.getElementById("tabelPoin").innerHTML = tabel;
+}
+
+function tambahEkstra(){
+    if(!a || !b){
+        alert("Hitung regresi dulu ya! 💕");
+        return;
+    }
     let x = Number(document.getElementById("xEkstra").value);
+    if(isNaN(x)){
+        alert("Masukkan nilai x yang valid! 🌸");
+        return;
+    }
     let y = a + b * x;
-    document.getElementById("hasilEkstra").innerHTML =
-        `🌸 y = ${y.toFixed(3)} 🌸`;
+    ekstrapolasiData.push({x: x, y: y});
+    updateTabelEkstra();
+    hitung();  // Update grafik dengan garis regresi yang tersambung
+    document.getElementById("xEkstra").value = "";
+}
+
+function hapusEkstra(index){
+    ekstrapolasiData.splice(index, 1);
+    updateTabelEkstra();
+    hitung();  // Update grafik setelah hapus
+}
+
+function updateTabelEkstra(){
+    let tabel = `<table><tr><th>No</th><th>x</th><th>y hasil ekstrapolasi</th><th>Aksi</th></tr>`;
+    ekstrapolasiData.forEach((point, index) => {
+        tabel += `<tr>
+            <td>${index + 1}</td>
+            <td>${point.x}</td>
+            <td>${point.y.toFixed(3)}</td>
+            <td><button onclick="hapusEkstra(${index})" style="background:#ff2f92; color:white; border:none; padding:5px 10px; border-radius:5px;">Hapus</button></td>
+        </tr>`;
+    });
+    tabel += `</table>`;
+    document.getElementById("tabelEkstra").innerHTML = tabel;
 }
 
 const slider = document.getElementById("zoomSlider");
@@ -327,6 +415,9 @@ slider.oninput = () => {
     container.style.transform = `scale(${s})`;
     zoomValue.innerText = slider.value + "%";
 };
+
+// Event listener untuk checkbox agar grafik update saat dicentang/centang
+document.getElementById("showRegression").addEventListener("change", hitung);
 </script>
 
 </body>

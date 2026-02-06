@@ -199,32 +199,32 @@ th{
 </div>
 
 <script>
-let chart,a,b;
+let chart, a, b;
 
 function hitung(){
-    let x=document.getElementById("dataX").value.split(",").map(Number);
-    let y=document.getElementById("dataY").value.split(",").map(Number);
-    let n=x.length;
+    let x = document.getElementById("dataX").value.split(",").map(Number);
+    let y = document.getElementById("dataY").value.split(",").map(Number);
+    let n = x.length;
 
-    if(n<2||n!==y.length){
+    if(n < 2 || n !== y.length){
         alert("Data X dan Y harus sama jumlahnya ya 💕");
         return;
     }
 
-    let sumX=0,sumY=0,sumX2=0,sumXY=0;
-    let tabel=`
+    let sumX = 0, sumY = 0, sumX2 = 0, sumXY = 0;
+    let tabel = `
     <table>
     <tr>
         <th>No</th><th>x</th><th>y</th><th>x²</th><th>xy</th>
     </tr>`;
 
-    for(let i=0;i<n;i++){
-        let x2=x[i]*x[i];
-        let xy=x[i]*y[i];
-        sumX+=x[i]; sumY+=y[i];
-        sumX2+=x2; sumXY+=xy;
+    for(let i = 0; i < n; i++){
+        let x2 = x[i] * x[i];
+        let xy = x[i] * y[i];
+        sumX += x[i]; sumY += y[i];
+        sumX2 += x2; sumXY += xy;
 
-        tabel+=`
+        tabel += `
         <tr>
             <td>${i+1}</td>
             <td>${x[i]}</td>
@@ -234,7 +234,7 @@ function hitung(){
         </tr>`;
     }
 
-    tabel+=`
+    tabel += `
     <tr>
         <th>Σ</th>
         <th>${sumX}</th>
@@ -244,77 +244,88 @@ function hitung(){
     </tr>
     </table>`;
 
-    document.getElementById("tabel").innerHTML=tabel;
+    document.getElementById("tabel").innerHTML = tabel;
 
-    b=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
-    a=(sumY-b*sumX)/n;
+    b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    a = (sumY - b * sumX) / n;
 
-    document.getElementById("hasil").innerHTML=
+    document.getElementById("hasil").innerHTML =
         `✨ <b>y = ${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
 
-    let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
-    let titikRegresi=[];
+    let tabelR = `<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
+    let titikRegresi = [];
 
-    for(let i=0;i<n;i++){
-        let yr=a+b*x[i];
-        tabelR+=`<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
-        titikRegresi.push({x:x[i],y:yr});
+    for(let i = 0; i < n; i++){
+        let yr = a + b * x[i];
+        tabelR += `<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
+        titikRegresi.push({x: x[i], y: yr});
     }
-    tabelR+=`</table>`;
-    document.getElementById("tabelRegresi").innerHTML=tabelR;
+    tabelR += `</table>`;
+    document.getElementById("tabelRegresi").innerHTML = tabelR;
 
-    let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
+    let scatterData = x.map((v, i) => ({x: v, y: y[i]}));
 
- if(chart)chart.destroy();
-chart=new Chart(document.getElementById("grafik"),{
-    type:"scatter",
-    data:{
-        datasets:[
-            {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6"},
-            {label:"Titik Regresi 💚",data:titikRegresi,backgroundColor:"#22c55e"},
-            {
-                label:"Garis Regresi ❤️",
-                type:"line",
-                data:[
-                    {x:Math.min(...x),y:a+b*Math.min(...x)},
-                    {x:Math.max(...x),y:a+b*Math.max(...x)}
-                ],
-                borderColor:"#FFFFFF"
-            }
-        ]
-    },
-    options: {
-        scales: {
-            x: {
-                grid: {
-                    color: 'white'  // Mengubah warna grid sumbu X menjadi putih
+    if(chart) chart.destroy();
+    chart = new Chart(document.getElementById("grafik"), {
+        type: "scatter",
+        data: {
+            datasets: [
+                {
+                    label: "Data Asli 💙",
+                    data: scatterData,
+                    backgroundColor: "#3b82f6",
+                    pointRadius: 10  // Ukuran titik data asli diperbesar
+                },
+                {
+                    label: "Titik Regresi 💚",
+                    data: titikRegresi,
+                    backgroundColor: "#22c55e",
+                    pointRadius: 10  // Ukuran titik regresi diperbesar
+                },
+                {
+                    label: "Garis Regresi ❤️",
+                    type: "line",
+                    data: [
+                        {x: Math.min(...x), y: a + b * Math.min(...x)},
+                        {x: Math.max(...x), y: a + b * Math.max(...x)}
+                    ],
+                    borderColor: "#FFFFFF"
+                    // Garis tidak perlu pointRadius, kecuali jika ingin titik pada garis
                 }
-            },
-            y: {
-                grid: {
-                    color: 'white'  // Mengubah warna grid sumbu Y menjadi putih
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                    grid: {
+                        color: 'white'
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'white'
+                    }
                 }
             }
         }
-    }
-});
+    });
 }
 
 function ekstrapolasi(){
-    let x=Number(document.getElementById("xEkstra").value);
-    let y=a+b*x;
-    document.getElementById("hasilEkstra").innerHTML=
+    let x = Number(document.getElementById("xEkstra").value);
+    let y = a + b * x;
+    document.getElementById("hasilEkstra").innerHTML =
         `🌸 y = ${y.toFixed(3)} 🌸`;
 }
 
-const slider=document.getElementById("zoomSlider");
-const container=document.getElementById("grafik-container");
-const zoomValue=document.getElementById("zoomValue");
+const slider = document.getElementById("zoomSlider");
+const container = document.getElementById("grafik-container");
+const zoomValue = document.getElementById("zoomValue");
 
-slider.oninput=()=>{
-    let s=slider.value/100;
-    container.style.transform=`scale(${s})`;
-    zoomValue.innerText=slider.value+"%";
+slider.oninput = () => {
+    let s = slider.value / 100;
+    container.style.transform = `scale(${s})`;
+    zoomValue.innerText = slider.value + "%";
 };
 </script>
 

@@ -18,7 +18,6 @@
             background-color: #f2f2f2;
         }
 
-        /* TAMBAHAN: container grafik */
         #grafik-container {
             width: 520px;
             overflow: auto;
@@ -46,29 +45,36 @@
 <h3>Hasil Regresi</h3>
 <p id="hasil"></p>
 
-<!-- TAMBAHAN: kontrol zoom -->
+<h3>Tabel Nilai Regresi (y = a + bx)</h3>
+<div id="tabelRegresi"></div>
+
+<h3>Regresi Ekstrapolasi</h3>
+<label>Masukkan nilai x:</label><br>
+<input type="number" id="xEkstra">
+<button onclick="hitungEkstrapolasi()">Hitung</button>
+<p id="hasilEkstra"></p>
+
 <label>Zoom Grafik:</label>
 <input type="range" min="50" max="200" value="100" id="zoomSlider">
 <span id="zoomValue">100%</span>
 
 <br><br>
 
-<!-- EDIT: canvas dibungkus container -->
 <div id="grafik-container">
-    <canvas id="grafik" width="500" height="300"></canvas>
+    <canvas id="grafik" width="800" height="450"></canvas>
 </div>
 
 <script>
 let chart;
+let aGlobal, bGlobal;
 
 function hitung() {
     let x = document.getElementById("dataX").value.split(",").map(Number);
     let y = document.getElementById("dataY").value.split(",").map(Number);
 
     let n = x.length;
-
-    if (n !== y.length || n === 0) {
-        alert("Jumlah data X dan Y harus sama!");
+    if (n !== y.length || n < 2) {
+        alert("Data minimal 2 dan jumlah X = Y");
         return;
     }
 
@@ -114,20 +120,48 @@ function hitung() {
         </tr>
         </table>
     `;
-
     document.getElementById("tabel").innerHTML = tabelHTML;
 
     let b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     let a = (sumY - b * sumX) / n;
 
+    aGlobal = a;
+    bGlobal = b;
+
     document.getElementById("hasil").innerHTML =
-        "n = " + n + "<br>" +
-        "a = " + a.toFixed(3) + "<br>" +
-        "b = " + b.toFixed(3) + "<br><br>" +
         "<b>Persamaan regresi:</b><br>" +
         "y = " + a.toFixed(3) + " + " + b.toFixed(3) + "x";
 
-    let scatterData = x.map((val, i) => ({
+    /* TABEL NILAI REGRESI */
+    let tabelRegresi = `
+        <table>
+        <tr>
+            <th>No</th>
+            <th>x</th>
+            <th>y (hasil regresi)</th>
+        </tr>
+    `;
+
+    let dataRegresi = [];
+
+    for (let i = 0; i < n; i++) {
+        let yReg = a + b * x[i];
+        dataRegresi.push({ x: x[i], y: yReg });
+
+        tabelRegresi += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${x[i]}</td>
+                <td>${yReg.toFixed(3)}</td>
+            </tr>
+        `;
+    }
+
+    tabelRegresi += "</table>";
+    document.getElementById("tabelRegresi").innerHTML = tabelRegresi;
+
+    /* DATA GRAFIK */
+    let dataAsli = x.map((val, i) => ({
         x: val,
         y: y[i]
     }));
@@ -148,23 +182,48 @@ function hitung() {
         data: {
             datasets: [
                 {
-                    label: "Data",
-                    data: scatterData,
+                    label: "Data Asli",
+                    data: dataAsli,
                     backgroundColor: "blue"
                 },
                 {
-                    label: "Garis Regresi",
+                    label: "Titik Hasil Regresi",
+                    data: dataRegresi,
+                    backgroundColor: "black",
+                    pointRadius: 6
+                },
+                {
+                    label: "Garis Regresi Linier",
                     type: "line",
                     data: garisRegresi,
                     borderColor: "red",
                     fill: false
                 }
             ]
+        },
+        options: {
+            responsive: false
         }
     });
 }
 
-/* TAMBAHAN: fungsi zoom */
+/* EKSTRAPOLASI */
+function hitungEkstrapolasi() {
+    let xBaru = Number(document.getElementById("xEkstra").value);
+    if (isNaN(xBaru)) {
+        alert("Masukkan nilai x yang valid");
+        return;
+    }
+
+    let yEkstra = aGlobal + bGlobal * xBaru;
+
+    document.getElementById("hasilEkstra").innerHTML =
+        "<b>Hasil Ekstrapolasi:</b><br>" +
+        "Untuk x = " + xBaru + "<br>" +
+        "y = " + yEkstra.toFixed(3);
+}
+
+/* ZOOM */
 const slider = document.getElementById("zoomSlider");
 const container = document.getElementById("grafik-container");
 const zoomValue = document.getElementById("zoomValue");

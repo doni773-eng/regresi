@@ -266,7 +266,18 @@ function hitung(){
     let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
 
     if(chart)chart.destroy();
-    chart = new Chart(document.getElementById("grafik"), {
+  let minX = Math.min(...x);
+let maxX = Math.max(...x);
+let minY = Math.min(...y);
+let maxY = Math.max(...y);
+
+let xPadding = (maxX - minX) * 0.15;
+let yPadding = (maxY - minY) * 0.15;
+
+let xStep = (maxX - minX) / 8;
+let yStep = (maxY - minY) / 8;
+   
+  chart = new Chart(document.getElementById("grafik"), {
     type: "scatter",
     data: {
         datasets: [
@@ -287,12 +298,13 @@ function hitung(){
                 label: "Garis Regresi ❤️",
                 type: "line",
                 data: [
-                    { x: Math.min(...x), y: a + b * Math.min(...x) },
-                    { x: Math.max(...x), y: a + b * Math.max(...x) }
+                    { x: minX, y: a + b * minX },
+                    { x: maxX, y: a + b * maxX }
                 ],
                 borderColor: "#ef4444",
                 borderWidth: 3,
-                fill: false
+                fill: false,
+                tension: 0
             }
         ]
     },
@@ -301,29 +313,44 @@ function hitung(){
         maintainAspectRatio: false,
         scales: {
             x: {
-                min: Math.min(...x) - 0.5,
-                max: Math.max(...x) + 0.5,
+                min: minX - xPadding,
+                max: maxX + xPadding,
                 title: {
                     display: true,
                     text: "Nilai X",
                     font: { size: 14, weight: "bold" }
                 },
+                grid: {
+                    color: "#e5e7eb",
+                    lineWidth: 1
+                },
                 ticks: {
-                    stepSize: (Math.max(...x) - Math.min(...x)) / 5,
-                    callback: v => Number(v).toFixed(2)
+                    stepSize: xStep,
+                    callback: value => value.toFixed(2)
                 }
             },
             y: {
-                min: Math.min(...y) - 0.5,
-                max: Math.max(...y) + 0.5,
+                min: minY - yPadding,
+                max: maxY + yPadding,
                 title: {
                     display: true,
                     text: "Nilai Y",
                     font: { size: 14, weight: "bold" }
                 },
+                grid: {
+                    color: "#e5e7eb",
+                    lineWidth: 1
+                },
                 ticks: {
-                    stepSize: (Math.max(...y) - Math.min(...y)) / 5,
-                    callback: v => Number(v).toFixed(2)
+                    stepSize: yStep,
+                    callback: value => value.toFixed(2)
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    font: { size: 12 }
                 }
             }
         }

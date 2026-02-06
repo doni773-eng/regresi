@@ -277,14 +277,14 @@ th{
 <h3>🔮 Ekstrapolasi</h3>
 <input type="number" id="xEkstra" placeholder="Masukkan x">
 <br><br>
-<button onclick="tambahEkstra()">➕ Tambah Ekstrapolasi</button>
+<button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
 <div id="tabelEkstra"></div>
 </div>
 
 <div class="section">
 <label>🔍 Zoom Grafik:</label>
-<input type="range" min="50" max="150" value="100" id="zoomSlider">
-<span id="zoomValue">100%</span>
+<input type="range" min="50" max="150" value="50" id="zoomSlider">
+<span id="zoomValue">50%</span>
 
 <br><br>
 
@@ -304,6 +304,7 @@ th{
 let chart, a, b;
 let dataX = [], dataY = [];
 let ekstrapolasiData = [];
+let minX, maxX, minY, maxY, stepSizeX, stepSizeY;
 
 function hitung(){
     if(dataX.length < 2 || dataY.length < 2 || dataX.length !== dataY.length){
@@ -369,8 +370,13 @@ function hitung(){
 
     let scatterData = x.map((v, i) => ({x: v, y: y[i]}));
     let allX = [...x, ...ekstrapolasiData.map(p => p.x)];
-    let minX = Math.min(...allX);
-    let maxX = Math.max(...allX);
+    let allY = [...y, ...ekstrapolasiData.map(p => p.y)];
+    minX = Math.min(...allX);
+    maxX = Math.max(...allX);
+    minY = Math.min(...allY);
+    maxY = Math.max(...allY);
+    stepSizeX = Math.max(1, Math.round((maxX - minX) / 30)); // Base 30 ticks untuk lebih banyak grid
+    stepSizeY = Math.max(1, Math.round((maxY - minY) / 30));
     let showReg = document.getElementById("showRegression").checked;
 
     if(chart) chart.destroy();
@@ -419,11 +425,23 @@ function hitung(){
                 x: {
                     grid: {
                         color: 'white'
+                    },
+                    ticks: {
+                        stepSize: stepSizeX,
+                        callback: function(value) {
+                            return Math.round(value); // Round to integer, no decimals
+                        }
                     }
                 },
                 y: {
                     grid: {
                         color: 'white'
+                    },
+                    ticks: {
+                        stepSize: stepSizeY,
+                        callback: function(value) {
+                            return Math.round(value); // Round to integer, no decimals
+                        }
                     }
                 }
             }
@@ -449,6 +467,18 @@ function hapusPoin(index){
     dataX.splice(index, 1);
     dataY.splice(index, 1);
     updateTabelPoin();
+    // Reset semua langkah berikutnya tergantung pada jumlah poin tersisa
+    if(dataX.length >= 2){
+        hitung(); // Hitung ulang regresi jika masih >=2 poin
+    } else {
+        // Jika kurang dari 2 poin, reset semua tabel dan grafik
+        document.getElementById("tabel").innerHTML = "";
+        document.getElementById("hasil").innerHTML = "";
+        document.getElementById("tabelRegresi").innerHTML = "";
+        ekstrapolasiData = []; // Reset ekstrapolasi juga
+        updateTabelEkstra();
+        if(chart) chart.destroy();
+    }
 }
 
 function updateTabelPoin(){
@@ -465,7 +495,7 @@ function updateTabelPoin(){
     document.getElementById("tabelPoin").innerHTML = tabel;
 }
 
-function tambahEkstra(){
+function tambahkanEkstra(){
     if(!a || !b){
         alert("Hitung regresi dulu ya! 💕");
         return;
@@ -510,6 +540,15 @@ slider.oninput = () => {
     let s = slider.value / 100;
     container.style.transform = `scale(${s})`;
     zoomValue.innerText = slider.value + "%";
+    // Update grid density based on zoom - lebih agresif untuk lebih banyak grid, rounded to integer
+    if(chart && minX !== undefined && maxX !== undefined && minY !== undefined && maxY !== undefined){
+        let zoomFactor = s * 3; // Dikalikan 3 untuk lebih agresif lagi, sehingga grid lebih banyak saat zoom
+        let newStepX = Math.max(1, Math.round(stepSizeX / zoomFactor));
+        let newStepY = Math.max(1, Math.round(stepSizeY / zoomFactor));
+        chart.options.scales.x.ticks.stepSize = newStepX;
+        chart.options.scales.y.ticks.stepSize = newStepY;
+        chart.update();
+    }
 };
 
 document.getElementById("showRegression").addEventListener("change", hitung);

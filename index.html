@@ -233,7 +233,7 @@ function hitung(){
             ...(showReg?[{label:"Titik Regresi 💚",data:titikRegresi,backgroundColor:"#22c55e",pointRadius:6},
             {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],
              borderColor:"#FFFFFF",backgroundColor:"#FFFFFF",borderWidth:2,pointRadius:0}]:[]),
-            ...(ekstrapolasiData.length>0?[{label:"Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}]:[])
+            ...(showReg && ekstrapolasiData.length>0?[{label:"Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}]:[])
         ]},
         options:{responsive:true,maintainAspectRatio:false,
             scales:{x:{grid:{color:'white'},ticks:{stepSize:stepSizeX,callback:v=>Math.round(v)}},

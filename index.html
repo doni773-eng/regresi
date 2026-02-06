@@ -6,68 +6,39 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-    body {
-        margin: 0;
-        font-family: "Segoe UI", Arial, sans-serif;
-        background:
-            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-            url("background.jpg") no-repeat center center fixed;
-        background-size: cover;
-    }
-
-    .overlay {
-        min-height: 100vh;
-        padding: 25px;
-        background: rgba(255,255,255,0.88);
-        backdrop-filter: blur(6px);
-        box-shadow: inset 0 0 120px rgba(0,0,0,0.25);
-    }
-
-    h2, h3 { color: #1f2937; }
-
-    label { font-weight: 600; }
-
-    input, button {
-        padding: 6px 10px;
-        border-radius: 6px;
-        border: 1px solid #aaa;
-        margin-top: 4px;
-    }
-
-    button {
-        cursor: pointer;
-        background: linear-gradient(135deg,#2563eb,#1e40af);
-        color: white;
-        border: none;
-        font-weight: bold;
-    }
-
-    button:hover { opacity: 0.9; }
-
-    table {
-        border-collapse: collapse;
-        margin-top: 15px;
-        background: white;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    }
-
-    table, th, td {
-        border: 1px solid #333;
-        padding: 6px 12px;
-        text-align: center;
-    }
-
-    th { background: #e5e7eb; }
-
-    #grafik-container {
-        width: 540px;
-        overflow: auto;
-        border-radius: 12px;
-        padding: 12px;
-        background: white;
-        box-shadow: 0 8px 22px rgba(0,0,0,0.25);
-        transform-origin: top left;
-    }
+body{
+    margin:0;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:
+        linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+        url("background.jpg") no-repeat center center fixed;
+    background-size:cover;
+}
+.overlay{
+    min-height:100vh;
+    padding:25px;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(6px);
+}
+table{
+    border-collapse:collapse;
+    margin-top:15px;
+    background:white;
+}
+table,th,td{
+    border:1px solid black;
+    padding:6px 12px;
+    text-align:center;
+}
+th{background:#e5e7eb;}
+#grafik-container{
+    width:540px;
+    padding:12px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 8px 22px rgba(0,0,0,.25);
+    transform-origin:top left;
+}
 </style>
 </head>
 
@@ -77,10 +48,10 @@
 <h2>Perhitungan Regresi Linier</h2>
 
 <label>Data X (pisahkan dengan koma):</label><br>
-<input type="text" id="dataX"><br><br>
+<input id="dataX"><br><br>
 
 <label>Data Y (pisahkan dengan koma):</label><br>
-<input type="text" id="dataY"><br><br>
+<input id="dataY"><br><br>
 
 <button onclick="hitung()">Hitung Regresi</button>
 
@@ -105,58 +76,83 @@
 <br><br>
 
 <div id="grafik-container">
-    <canvas id="grafik" width="600" height="350"></canvas>
+<canvas id="grafik" width="600" height="350"></canvas>
 </div>
 
 </div>
 
 <script>
-let chart, a, b;
+let chart,a,b;
 
-function hitung() {
-    let x = document.getElementById("dataX").value.split(",").map(Number);
-    let y = document.getElementById("dataY").value.split(",").map(Number);
-    let n = x.length;
+function hitung(){
+    let x=document.getElementById("dataX").value.split(",").map(Number);
+    let y=document.getElementById("dataY").value.split(",").map(Number);
+    let n=x.length;
 
-    if (n < 2 || n !== y.length) {
+    if(n<2||n!==y.length){
         alert("Minimal 2 data dan jumlah X = Y");
         return;
     }
 
     let sumX=0,sumY=0,sumX2=0,sumXY=0;
-    let tabel = `<table><tr><th>No</th><th>x</th><th>y</th></tr>`;
+    let tabel=`
+    <table>
+    <tr>
+        <th>No</th><th>x</th><th>y</th><th>x²</th><th>xy</th>
+    </tr>`;
 
     for(let i=0;i<n;i++){
+        let x2=x[i]*x[i];
+        let xy=x[i]*y[i];
+
         sumX+=x[i];
         sumY+=y[i];
-        sumX2+=x[i]*x[i];
-        sumXY+=x[i]*y[i];
-        tabel+=`<tr><td>${i+1}</td><td>${x[i]}</td><td>${y[i]}</td></tr>`;
+        sumX2+=x2;
+        sumXY+=xy;
+
+        tabel+=`
+        <tr>
+            <td>${i+1}</td>
+            <td>${x[i]}</td>
+            <td>${y[i]}</td>
+            <td>${x2}</td>
+            <td>${xy}</td>
+        </tr>`;
     }
-    tabel+=`</table>`;
-    document.getElementById("tabel").innerHTML = tabel;
 
-    b = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
-    a = (sumY - b*sumX)/n;
+    tabel+=`
+    <tr>
+        <th>Σ</th>
+        <th>${sumX}</th>
+        <th>${sumY}</th>
+        <th>${sumX2}</th>
+        <th>${sumXY}</th>
+    </tr>
+    </table>`;
 
-    document.getElementById("hasil").innerHTML =
+    document.getElementById("tabel").innerHTML=tabel;
+
+    b=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+    a=(sumY-b*sumX)/n;
+
+    document.getElementById("hasil").innerHTML=
         `y = ${a.toFixed(3)} + ${b.toFixed(3)}x`;
 
-    let tabelR = `<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
-    let titikRegresi = [];
+    let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
+    let titikRegresi=[];
 
     for(let i=0;i<n;i++){
-        let yr = a + b*x[i];
+        let yr=a+b*x[i];
         tabelR+=`<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
-        titikRegresi.push({x:x[i], y:yr});
+        titikRegresi.push({x:x[i],y:yr});
     }
     tabelR+=`</table>`;
-    document.getElementById("tabelRegresi").innerHTML = tabelR;
+    document.getElementById("tabelRegresi").innerHTML=tabelR;
 
-    let scatterData = x.map((v,i)=>({x:v,y:y[i]}));
+    let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
 
-    if(chart) chart.destroy();
-    chart = new Chart(document.getElementById("grafik"),{
+    if(chart)chart.destroy();
+    chart=new Chart(document.getElementById("grafik"),{
         type:"scatter",
         data:{
             datasets:[
@@ -177,10 +173,9 @@ function hitung() {
 }
 
 function ekstrapolasi(){
-    let x = Number(document.getElementById("xEkstra").value);
-    let y = a + b*x;
-    document.getElementById("hasilEkstra").innerHTML =
-        `y = ${y.toFixed(3)}`;
+    let x=Number(document.getElementById("xEkstra").value);
+    let y=a+b*x;
+    document.getElementById("hasilEkstra").innerHTML=`y = ${y.toFixed(3)}`;
 }
 
 const slider=document.getElementById("zoomSlider");

@@ -2,42 +2,141 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Regresi Linier</title>
+
+<!-- Google Font imut -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:"Segoe UI",Arial,sans-serif;
+    font-family:'Quicksand',sans-serif;
     background:
-        linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-        url("background.jpg") no-repeat center center fixed;
-    background-size:cover;
+        radial-gradient(circle at top left,#ff9acb,#ff5fa2,#ff2f92);
+    color:#333;
 }
+
+/* background futuristik */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,.06) 0,
+            rgba(255,255,255,.06) 2px,
+            transparent 2px,
+            transparent 10px
+        );
+    pointer-events:none;
+}
+
 .overlay{
     min-height:100vh;
-    padding:25px;
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(6px);
+    padding:20px;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-radius:22px;
+    max-width:1100px;
+    margin:20px auto;
+    box-shadow:0 20px 45px rgba(0,0,0,.25);
 }
+
+/* judul lucu */
+h2{
+    text-align:center;
+    color:#ff2f92;
+    margin-bottom:5px;
+}
+.subjudul{
+    text-align:center;
+    font-weight:600;
+    margin-bottom:25px;
+}
+.subjudul::after{
+    content:" 💖📈✨";
+}
+
+label{
+    font-weight:600;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-family:'Quicksand',sans-serif;
+}
+
+button{
+    background:#ff5fa2;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow:0 6px 15px rgba(255,95,162,.5);
+}
+button:hover{
+    background:#ff2f92;
+}
+
+/* tabel */
 table{
+    width:100%;
     border-collapse:collapse;
     margin-top:15px;
     background:white;
+    border-radius:14px;
+    overflow:hidden;
 }
-table,th,td{
-    border:1px solid black;
-    padding:6px 12px;
+th,td{
+    padding:8px;
+    border:1px solid #ddd;
     text-align:center;
 }
-th{background:#e5e7eb;}
+th{
+    background:#ffe0ef;
+}
+
+/* kartu section */
+.section{
+    margin-top:25px;
+    padding:18px;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+/* grafik */
 #grafik-container{
-    width:540px;
+    width:100%;
     padding:12px;
     background:white;
-    border-radius:12px;
-    box-shadow:0 8px 22px rgba(0,0,0,.25);
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
     transform-origin:top left;
+}
+
+/* imut */
+.emoji{
+    font-size:1.2em;
+}
+
+/* mobile */
+@media(max-width:600px){
+    h2{font-size:1.4em;}
+    button{width:100%;}
 }
 </style>
 </head>
@@ -46,38 +145,55 @@ th{background:#e5e7eb;}
 <div class="overlay">
 
 <h2>Perhitungan Regresi Linier</h2>
-<h2>Doni Stiawan, S.Mat</h2>
+<div class="subjudul">Doni Stiawan, S.Mat</div>
 
-<label>Data X (pisahkan dengan koma):</label><br>
-<input id="dataX"><br><br>
+<div class="section">
+<label>Data X (pisahkan dengan koma):</label>
+<input id="dataX" placeholder="contoh: 2,4,6,8">
 
-<label>Data Y (pisahkan dengan koma):</label><br>
-<input id="dataY"><br><br>
+<br><br>
 
-<button onclick="hitung()">Hitung Regresi</button>
+<label>Data Y (pisahkan dengan koma):</label>
+<input id="dataY" placeholder="contoh: 5,9,13,17">
 
-<h3>Tabel Perhitungan</h3>
+<br><br>
+
+<button onclick="hitung()">✨ Hitung Regresi ✨</button>
+</div>
+
+<div class="section">
+<h3>📊 Tabel Perhitungan</h3>
 <div id="tabel"></div>
+</div>
 
-<h3>Hasil Regresi</h3>
+<div class="section">
+<h3>💡 Hasil Regresi</h3>
 <p id="hasil"></p>
+</div>
 
-<h3>Tabel Nilai Regresi</h3>
+<div class="section">
+<h3>📈 Tabel Nilai Regresi</h3>
 <div id="tabelRegresi"></div>
+</div>
 
-<h3>Ekstrapolasi (isi x manual)</h3>
-<input type="number" id="xEkstra">
+<div class="section">
+<h3>🔮 Ekstrapolasi</h3>
+<input type="number" id="xEkstra" placeholder="Masukkan x">
+<br><br>
 <button onclick="ekstrapolasi()">Hitung y</button>
 <p id="hasilEkstra"></p>
+</div>
 
-<label>Zoom Grafik:</label>
+<div class="section">
+<label>🔍 Zoom Grafik:</label>
 <input type="range" min="50" max="200" value="100" id="zoomSlider">
 <span id="zoomValue">100%</span>
 
 <br><br>
 
 <div id="grafik-container">
-<canvas id="grafik" width="600" height="350"></canvas>
+<canvas id="grafik" height="320"></canvas>
+</div>
 </div>
 
 </div>
@@ -91,7 +207,7 @@ function hitung(){
     let n=x.length;
 
     if(n<2||n!==y.length){
-        alert("Minimal 2 data dan jumlah X = Y");
+        alert("Data X dan Y harus sama jumlahnya ya 💕");
         return;
     }
 
@@ -105,11 +221,8 @@ function hitung(){
     for(let i=0;i<n;i++){
         let x2=x[i]*x[i];
         let xy=x[i]*y[i];
-
-        sumX+=x[i];
-        sumY+=y[i];
-        sumX2+=x2;
-        sumXY+=xy;
+        sumX+=x[i]; sumY+=y[i];
+        sumX2+=x2; sumXY+=xy;
 
         tabel+=`
         <tr>
@@ -137,7 +250,7 @@ function hitung(){
     a=(sumY-b*sumX)/n;
 
     document.getElementById("hasil").innerHTML=
-        `y = ${a.toFixed(3)} + ${b.toFixed(3)}x`;
+        `✨ <b>y = ${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
 
     let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
     let titikRegresi=[];
@@ -157,16 +270,16 @@ function hitung(){
         type:"scatter",
         data:{
             datasets:[
-                {label:"Data Asli",data:scatterData,backgroundColor:"blue"},
-                {label:"Titik Regresi",data:titikRegresi,backgroundColor:"green"},
+                {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6"},
+                {label:"Titik Regresi 💚",data:titikRegresi,backgroundColor:"#22c55e"},
                 {
-                    label:"Garis Regresi",
+                    label:"Garis Regresi ❤️",
                     type:"line",
                     data:[
                         {x:Math.min(...x),y:a+b*Math.min(...x)},
                         {x:Math.max(...x),y:a+b*Math.max(...x)}
                     ],
-                    borderColor:"red"
+                    borderColor:"#ef4444"
                 }
             ]
         }
@@ -176,7 +289,8 @@ function hitung(){
 function ekstrapolasi(){
     let x=Number(document.getElementById("xEkstra").value);
     let y=a+b*x;
-    document.getElementById("hasilEkstra").innerHTML=`y = ${y.toFixed(3)}`;
+    document.getElementById("hasilEkstra").innerHTML=
+        `🌸 y = ${y.toFixed(3)} 🌸`;
 }
 
 const slider=document.getElementById("zoomSlider");

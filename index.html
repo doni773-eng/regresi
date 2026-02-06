@@ -266,24 +266,69 @@ function hitung(){
     let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
 
     if(chart)chart.destroy();
-    chart=new Chart(document.getElementById("grafik"),{
-        type:"scatter",
-        data:{
-            datasets:[
-                {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6"},
-                {label:"Titik Regresi 💚",data:titikRegresi,backgroundColor:"#22c55e"},
-                {
-                    label:"Garis Regresi ❤️",
-                    type:"line",
-                    data:[
-                        {x:Math.min(...x),y:a+b*Math.min(...x)},
-                        {x:Math.max(...x),y:a+b*Math.max(...x)}
-                    ],
-                    borderColor:"#ef4444"
+    chart = new Chart(document.getElementById("grafik"), {
+    type: "scatter",
+    data: {
+        datasets: [
+            {
+                label: "Data Asli 💙",
+                data: scatterData,
+                backgroundColor: "#3b82f6",
+                pointRadius: 5,
+                pointHoverRadius: 7
+            },
+            {
+                label: "Titik Regresi 💚",
+                data: titikRegresi,
+                backgroundColor: "#22c55e",
+                pointRadius: 5
+            },
+            {
+                label: "Garis Regresi ❤️",
+                type: "line",
+                data: [
+                    { x: Math.min(...x), y: a + b * Math.min(...x) },
+                    { x: Math.max(...x), y: a + b * Math.max(...x) }
+                ],
+                borderColor: "#ef4444",
+                borderWidth: 3,
+                fill: false
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                min: Math.min(...x) - 0.5,
+                max: Math.max(...x) + 0.5,
+                title: {
+                    display: true,
+                    text: "Nilai X",
+                    font: { size: 14, weight: "bold" }
+                },
+                ticks: {
+                    stepSize: (Math.max(...x) - Math.min(...x)) / 5,
+                    callback: v => Number(v).toFixed(2)
                 }
-            ]
+            },
+            y: {
+                min: Math.min(...y) - 0.5,
+                max: Math.max(...y) + 0.5,
+                title: {
+                    display: true,
+                    text: "Nilai Y",
+                    font: { size: 14, weight: "bold" }
+                },
+                ticks: {
+                    stepSize: (Math.max(...y) - Math.min(...y)) / 5,
+                    callback: v => Number(v).toFixed(2)
+                }
+            }
         }
-    });
+    }
+});
 }
 
 function ekstrapolasi(){

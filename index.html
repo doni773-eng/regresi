@@ -60,8 +60,8 @@ h2{
     text-align:center;
     font-weight:600;
     margin-bottom:25px;
-    font-size: 1.9em; /* Ditambahkan: Ukuran font lebih besar */
-    font-weight: bold; /* Ditambahkan: Lebih tebal untuk tampilan besar */
+    font-size: 1.9em;
+    font-weight: bold;
 }
 .subjudul::after{
     content:" 📈";
@@ -88,12 +88,13 @@ button{
     cursor:pointer;
     font-weight:700;
     box-shadow:0 6px 15px rgba(255,95,162,.5);
+    transition: background 0.3s;
 }
 button:hover{
     background:#ff2f92;
 }
 
-/* tabel */
+/* tabel - diperbesar ukuran font dan padding untuk ukuran tabel dan angka lebih besar */
 table{
     width:100%;
     border-collapse:collapse;
@@ -101,14 +102,16 @@ table{
     background:white;
     border-radius:14px;
     overflow:hidden;
+    font-size: 1.5em;
 }
 th,td{
-    padding:8px;
+    padding:10px;
     border:1px solid #ddd;
     text-align:center;
 }
 th{
     background:#ffe0ef;
+    font-size: 1.2em;
 }
 
 /* kartu section */
@@ -128,6 +131,7 @@ th{
     border-radius:18px;
     box-shadow:0 10px 25px rgba(0,0,0,.25);
     transform-origin:top left;
+    overflow: hidden;
 }
 
 /* imut */
@@ -135,10 +139,87 @@ th{
     font-size:1.2em;
 }
 
-/* mobile */
-@media(max-width:600px){
-    h2{font-size:1.4em;}
-    button{width:100%;}
+/* mobile responsiveness - diperbesar lebih untuk versi mobile */
+@media(max-width:768px){
+    .overlay{
+        margin:10px;
+        padding:15px;
+    }
+    h2{
+        font-size:1.4em;
+    }
+    .subjudul{
+        font-size:1.5em;
+    }
+    input{
+        width:100%;
+        margin-bottom:10px;
+        font-size:18px;
+        display: block;
+    }
+    button{
+        width:100%;
+        padding:18px;
+        font-size:1.2em;
+    }
+    table{
+        font-size:1.4em;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+    }
+    th,td{
+        padding:12px;
+    }
+    .section{
+        padding:20px;
+    }
+    #grafik-container{
+        padding:10px;
+    }
+    .section input[type="number"]{
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .section button{
+        margin-top: 10px;
+    }
+    input[type="range"]{
+        width: 100%;
+        height: 10px;
+    }
+    label[for="showRegression"]{
+        display: block;
+        margin-top: 10px;
+        font-size: 1.1em;
+    }
+}
+
+@media(max-width:480px){
+    h2{
+        font-size:1.2em;
+    }
+    .subjudul{
+        font-size:1.3em;
+    }
+    table{
+        font-size:1.3em;
+    }
+    th,td{
+        padding:10px;
+    }
+    .section{
+        padding:15px;
+    }
+    button{
+        padding:15px;
+        font-size:1.1em;
+    }
+    input{
+        font-size:16px;
+        padding:12px;
+    }
 }
 </style>
 </head>
@@ -147,7 +228,7 @@ th{
 <div class="overlay">
 
 <h2>Perhitungan Regresi Linier</h2>
-<div class="subjudul">DONI STIAWAN, S.MAT</div>  <!-- Diubah: Nama menjadi huruf besar -->
+<div class="subjudul">DONI STIAWAN, S.MAT</div>
 
 <div class="section">
 <h3>📊 Tambah Poin Data</h3>
@@ -155,7 +236,7 @@ th{
 <input type="number" id="yPoin" placeholder="Masukkan y">
 <br><br>
 <button onclick="tambahPoin()">➕ Tambah Poin</button>
-<div id="tabelPoin"></div>  <!-- Tabel poin data -->
+<div id="tabelPoin"></div>
 <br>
 <button onclick="hitung()">✨ Hitung Regresi ✨</button>
 </div>
@@ -180,7 +261,7 @@ th{
 <input type="number" id="xEkstra" placeholder="Masukkan x">
 <br><br>
 <button onclick="tambahEkstra()">➕ Tambah Ekstrapolasi</button>
-<div id="tabelEkstra"></div>  <!-- Tabel akan muncul di sini -->
+<div id="tabelEkstra"></div>
 </div>
 
 <div class="section">
@@ -190,7 +271,6 @@ th{
 
 <br><br>
 
-<!-- Checkbox untuk toggle garis regresi -->
 <input type="checkbox" id="showRegression" checked>
 <label for="showRegression">Munculkan Garis Regresi</label>
 
@@ -205,8 +285,11 @@ th{
 
 <script>
 let chart, a, b;
-let dataX = [], dataY = [];  // Array global untuk data X dan Y
-let ekstrapolasiData = [];  // Array untuk ekstrapolasi
+let dataX = [], dataY = [];
+let ekstrapolasiData = [];
+
+// Pastikan checkbox tercentang secara default
+document.getElementById("showRegression").checked = true;
 
 function hitung(){
     if(dataX.length < 2 || dataY.length < 2 || dataX.length !== dataY.length){
@@ -271,13 +354,9 @@ function hitung(){
     document.getElementById("tabelRegresi").innerHTML = tabelR;
 
     let scatterData = x.map((v, i) => ({x: v, y: y[i]}));
-
-    // Gabungkan semua x untuk garis regresi yang tersambung
     let allX = [...x, ...ekstrapolasiData.map(p => p.x)];
     let minX = Math.min(...allX);
     let maxX = Math.max(...allX);
-
-    // Ambil status checkbox
     let showReg = document.getElementById("showRegression").checked;
 
     if(chart) chart.destroy();
@@ -291,34 +370,37 @@ function hitung(){
                     backgroundColor: "#3b82f6",
                     pointRadius: 6
                 },
-                {
-                    label: "Titik Regresi 💚",
-                    data: titikRegresi,
-                    backgroundColor: "#22c55e",
-                    pointRadius: 6
-                },
+                ...(showReg ? [
+                    {
+                        label: "Titik Regresi 💚",
+                        data: titikRegresi,
+                        backgroundColor: "#22c55e",
+                        pointRadius: 6
+                    },
+                    {
+                        label: "Garis Regresi 🤍",
+                        type: "line",
+                        data: [
+                            {x: minX, y: a + b * minX},
+                            {x: maxX, y: a + b * maxX}
+                        ],
+                        borderColor: "#FFFFFF",
+                        backgroundColor: "#FFFFFF",
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                ] : []),
                 {
                     label: "Ekstrapolasi 💛",
                     data: ekstrapolasiData,
                     backgroundColor: "#FFFF00",
                     pointRadius: 6
-                },
-                // Dataset garis regresi hanya ditampilkan jika checkbox checked
-                ...(showReg ? [{
-                    label: "Garis Regresi 🤍",
-                    type: "line",
-                    data: [
-                        {x: minX, y: a + b * minX},
-                        {x: maxX, y: a + b * maxX}
-                    ],
-                    borderColor: "#FFFFFF",
-                    backgroundColor: "#FFFFFF",
-                    borderWidth: 2,
-                    pointRadius: 0
-                }] : [])
+                }
             ]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     grid: {
@@ -382,14 +464,14 @@ function tambahEkstra(){
     let y = a + b * x;
     ekstrapolasiData.push({x: x, y: y});
     updateTabelEkstra();
-    hitung();  // Update grafik dengan garis regresi yang tersambung
+    hitung();
     document.getElementById("xEkstra").value = "";
 }
 
 function hapusEkstra(index){
     ekstrapolasiData.splice(index, 1);
     updateTabelEkstra();
-    hitung();  // Update grafik setelah hapus
+    hitung();
 }
 
 function updateTabelEkstra(){
@@ -416,7 +498,6 @@ slider.oninput = () => {
     zoomValue.innerText = slider.value + "%";
 };
 
-// Event listener untuk checkbox agar grafik update saat dicentang/centang
 document.getElementById("showRegression").addEventListener("change", hitung);
 </script>
 

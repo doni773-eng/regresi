@@ -1,42 +1,86 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Regresi Linier</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        table {
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 6px 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+<meta charset="UTF-8">
+<title>Regresi Linier</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        #grafik-container {
-            width: 520px;
-            overflow: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            transform-origin: top left;
-        }
-    </style>
+<style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:
+            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            url("background.jpg") no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .overlay {
+        min-height: 100vh;
+        padding: 25px;
+        background: rgba(255,255,255,0.88);
+        backdrop-filter: blur(6px);
+        box-shadow: inset 0 0 120px rgba(0,0,0,0.25);
+    }
+
+    h2, h3 { color: #1f2937; }
+
+    label { font-weight: 600; }
+
+    input, button {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+        margin-top: 4px;
+    }
+
+    button {
+        cursor: pointer;
+        background: linear-gradient(135deg,#2563eb,#1e40af);
+        color: white;
+        border: none;
+        font-weight: bold;
+    }
+
+    button:hover { opacity: 0.9; }
+
+    table {
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: white;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+
+    table, th, td {
+        border: 1px solid #333;
+        padding: 6px 12px;
+        text-align: center;
+    }
+
+    th { background: #e5e7eb; }
+
+    #grafik-container {
+        width: 540px;
+        overflow: auto;
+        border-radius: 12px;
+        padding: 12px;
+        background: white;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+        transform-origin: top left;
+    }
+</style>
 </head>
+
 <body>
+<div class="overlay">
 
 <h2>Perhitungan Regresi Linier</h2>
-<h2>DONI STIAWAN, S.Mat, Gr</h2>
 
 <label>Data X (pisahkan dengan koma):</label><br>
-<input type="text" id="dataX" placeholder="Contoh: 1,2,3,4,5"><br><br>
+<input type="text" id="dataX"><br><br>
 
 <label>Data Y (pisahkan dengan koma):</label><br>
-<input type="text" id="dataY" placeholder="Contoh: 2,3,5,4,6"><br><br>
+<input type="text" id="dataY"><br><br>
 
 <button onclick="hitung()">Hitung Regresi</button>
 
@@ -46,13 +90,12 @@
 <h3>Hasil Regresi</h3>
 <p id="hasil"></p>
 
-<h3>Tabel Nilai Regresi Interpolasi (y = a + bx)</h3>
+<h3>Tabel Nilai Regresi</h3>
 <div id="tabelRegresi"></div>
 
-<h3>Regresi Ekstrapolasi</h3>
-<label>Masukkan nilai x:</label><br>
+<h3>Ekstrapolasi (isi x manual)</h3>
 <input type="number" id="xEkstra">
-<button onclick="hitungEkstrapolasi()">Hitung</button>
+<button onclick="ekstrapolasi()">Hitung y</button>
 <p id="hasilEkstra"></p>
 
 <label>Zoom Grafik:</label>
@@ -62,178 +105,93 @@
 <br><br>
 
 <div id="grafik-container">
-    <canvas id="grafik" width="800" height="450"></canvas>
+    <canvas id="grafik" width="600" height="350"></canvas>
+</div>
+
 </div>
 
 <script>
-let chart;
-let aGlobal, bGlobal;
+let chart, a, b;
 
 function hitung() {
     let x = document.getElementById("dataX").value.split(",").map(Number);
     let y = document.getElementById("dataY").value.split(",").map(Number);
-
     let n = x.length;
-    if (n !== y.length || n < 2) {
-        alert("Data minimal 2 dan jumlah X = Y");
+
+    if (n < 2 || n !== y.length) {
+        alert("Minimal 2 data dan jumlah X = Y");
         return;
     }
 
-    let sumX = 0, sumY = 0, sumX2 = 0, sumXY = 0;
-    let tabelHTML = `
-        <table>
-        <tr>
-            <th>No</th>
-            <th>x</th>
-            <th>y</th>
-            <th>x²</th>
-            <th>xy</th>
-        </tr>
-    `;
+    let sumX=0,sumY=0,sumX2=0,sumXY=0;
+    let tabel = `<table><tr><th>No</th><th>x</th><th>y</th></tr>`;
 
-    for (let i = 0; i < n; i++) {
-        let x2 = x[i] * x[i];
-        let xy = x[i] * y[i];
-
-        sumX += x[i];
-        sumY += y[i];
-        sumX2 += x2;
-        sumXY += xy;
-
-        tabelHTML += `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${x[i]}</td>
-                <td>${y[i]}</td>
-                <td>${x2}</td>
-                <td>${xy}</td>
-            </tr>
-        `;
+    for(let i=0;i<n;i++){
+        sumX+=x[i];
+        sumY+=y[i];
+        sumX2+=x[i]*x[i];
+        sumXY+=x[i]*y[i];
+        tabel+=`<tr><td>${i+1}</td><td>${x[i]}</td><td>${y[i]}</td></tr>`;
     }
+    tabel+=`</table>`;
+    document.getElementById("tabel").innerHTML = tabel;
 
-    tabelHTML += `
-        <tr>
-            <th>Σ</th>
-            <th>${sumX}</th>
-            <th>${sumY}</th>
-            <th>${sumX2}</th>
-            <th>${sumXY}</th>
-        </tr>
-        </table>
-    `;
-    document.getElementById("tabel").innerHTML = tabelHTML;
-
-    let b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    let a = (sumY - b * sumX) / n;
-
-    aGlobal = a;
-    bGlobal = b;
+    b = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+    a = (sumY - b*sumX)/n;
 
     document.getElementById("hasil").innerHTML =
-        "<b>Persamaan regresi:</b><br>" +
-        "y = " + a.toFixed(3) + " + " + b.toFixed(3) + "x";
+        `y = ${a.toFixed(3)} + ${b.toFixed(3)}x`;
 
-    /* TABEL NILAI REGRESI */
-    let tabelRegresi = `
-        <table>
-        <tr>
-            <th>No</th>
-            <th>x</th>
-            <th>y (hasil regresi)</th>
-        </tr>
-    `;
+    let tabelR = `<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
+    let titikRegresi = [];
 
-    let dataRegresi = [];
-
-    for (let i = 0; i < n; i++) {
-        let yReg = a + b * x[i];
-        dataRegresi.push({ x: x[i], y: yReg });
-
-        tabelRegresi += `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${x[i]}</td>
-                <td>${yReg.toFixed(3)}</td>
-            </tr>
-        `;
+    for(let i=0;i<n;i++){
+        let yr = a + b*x[i];
+        tabelR+=`<tr><td>${x[i]}</td><td>${yr.toFixed(3)}</td></tr>`;
+        titikRegresi.push({x:x[i], y:yr});
     }
+    tabelR+=`</table>`;
+    document.getElementById("tabelRegresi").innerHTML = tabelR;
 
-    tabelRegresi += "</table>";
-    document.getElementById("tabelRegresi").innerHTML = tabelRegresi;
+    let scatterData = x.map((v,i)=>({x:v,y:y[i]}));
 
-    /* DATA GRAFIK */
-    let dataAsli = x.map((val, i) => ({
-        x: val,
-        y: y[i]
-    }));
-
-    let xMin = Math.min(...x);
-    let xMax = Math.max(...x);
-
-    let garisRegresi = [
-        { x: xMin, y: a + b * xMin },
-        { x: xMax, y: a + b * xMax }
-    ];
-
-    if (chart) chart.destroy();
-
-    const ctx = document.getElementById("grafik").getContext("2d");
-    chart = new Chart(ctx, {
-        type: "scatter",
-        data: {
-            datasets: [
+    if(chart) chart.destroy();
+    chart = new Chart(document.getElementById("grafik"),{
+        type:"scatter",
+        data:{
+            datasets:[
+                {label:"Data Asli",data:scatterData,backgroundColor:"blue"},
+                {label:"Titik Regresi",data:titikRegresi,backgroundColor:"green"},
                 {
-                    label: "Data Asli",
-                    data: dataAsli,
-                    backgroundColor: "blue"
-                },
-                {
-                    label: "Titik Hasil Regresi",
-                    data: dataRegresi,
-                    backgroundColor: "black",
-                    pointRadius: 6
-                },
-                {
-                    label: "Garis Regresi Linier",
-                    type: "line",
-                    data: garisRegresi,
-                    borderColor: "red",
-                    fill: false
+                    label:"Garis Regresi",
+                    type:"line",
+                    data:[
+                        {x:Math.min(...x),y:a+b*Math.min(...x)},
+                        {x:Math.max(...x),y:a+b*Math.max(...x)}
+                    ],
+                    borderColor:"red"
                 }
             ]
-        },
-        options: {
-            responsive: false
         }
     });
 }
 
-/* EKSTRAPOLASI */
-function hitungEkstrapolasi() {
-    let xBaru = Number(document.getElementById("xEkstra").value);
-    if (isNaN(xBaru)) {
-        alert("Masukkan nilai x yang valid");
-        return;
-    }
-
-    let yEkstra = aGlobal + bGlobal * xBaru;
-
+function ekstrapolasi(){
+    let x = Number(document.getElementById("xEkstra").value);
+    let y = a + b*x;
     document.getElementById("hasilEkstra").innerHTML =
-        "<b>Hasil Ekstrapolasi:</b><br>" +
-        "Untuk x = " + xBaru + "<br>" +
-        "y = " + yEkstra.toFixed(3);
+        `y = ${y.toFixed(3)}`;
 }
 
-/* ZOOM */
-const slider = document.getElementById("zoomSlider");
-const container = document.getElementById("grafik-container");
-const zoomValue = document.getElementById("zoomValue");
+const slider=document.getElementById("zoomSlider");
+const container=document.getElementById("grafik-container");
+const zoomValue=document.getElementById("zoomValue");
 
-slider.addEventListener("input", function () {
-    let scale = slider.value / 100;
-    container.style.transform = "scale(" + scale + ")";
-    zoomValue.innerText = slider.value + "%";
-});
+slider.oninput=()=>{
+    let s=slider.value/100;
+    container.style.transform=`scale(${s})`;
+    zoomValue.innerText=slider.value+"%";
+};
 </script>
 
 </body>

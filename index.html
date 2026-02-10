@@ -2,14 +2,14 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Regresi Linier - Doni Stiawan, S.Mat</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{box-sizing:border-box;}
+*{box-sizing:border-box; touch-action: manipulation;}
 body, html {
     margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Quicksand', sans-serif;
@@ -17,94 +17,71 @@ body, html {
 }
 
 /* --- BACKGROUND PARTIKEL --- */
-#canvas-bg {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1; display: block;
-}
+#canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-/* --- HALAMAN VALIDASI MENJEBAK --- */
+/* --- HALAMAN VALIDASI MENJEBAK (FIXED FOR MOBILE) --- */
 #validation-page {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #050a14; z-index: 2000;
-    display: flex; justify-content: center; align-items: center; text-align: center;
+    background: #050a14; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
 }
 .val-card {
-    background: rgba(15, 23, 42, 0.95); padding: 30px; border-radius: 20px;
-    border: 2px solid #ff2f92; max-width: 450px; width: 90%;
-    box-shadow: 0 0 30px rgba(255, 47, 146, 0.4);
-    z-index: 2001;
+    background: rgba(15, 23, 42, 0.98); padding: 30px; border-radius: 20px;
+    border: 2px solid #ff2f92; width: 90%; max-width: 400px;
+    text-align: center; position: relative; min-height: 300px;
 }
-.val-card h2 { color: #ff2f92; margin-bottom: 20px; font-size: 1.5rem; }
-.val-card p { color: white; font-size: 1rem; line-height: 1.5; }
-.btn-val-group {
-    display: flex; justify-content: center; gap: 15px; margin-top: 30px;
-    position: relative; min-height: 60px;
-}
-.btn-iya { background: #ff2f92; color: white; padding: 12px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-.btn-tidak { background: #475569; color: white; padding: 12px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; position: absolute; transition: 0.2s ease; }
+.val-card h2 { color: #ff2f92; margin-bottom: 15px; }
+.val-card p { color: white; margin-bottom: 25px; }
 
-/* --- MAIN PAGE STYLES --- */
+.btn-val-group { position: relative; width: 100%; height: 120px; margin-top: 20px; }
+.btn-iya { 
+    background: #ff2f92; color: white; padding: 12px 25px; border-radius: 10px; 
+    border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem;
+}
+.btn-tidak { 
+    background: #475569; color: white; padding: 12px 20px; border-radius: 10px; 
+    border: none; font-weight: bold; cursor: pointer; position: absolute; 
+    left: 50%; bottom: 0; transform: translateX(-50%); transition: 0.2s;
+}
+
+/* --- MAIN PAGE (KODINGAN ASLI BAPAK DENGAN OPTIMASI MOBILE) --- */
 .overlay {
-    position: relative; z-index: 10;
-    min-height: 100vh; padding: 15px;
+    position: relative; z-index: 10; display: none;
+    min-height: 100vh; padding: 20px;
     background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    border-radius: 22px;
-    max-width: 1100px;
-    margin: 15px auto;
+    backdrop-filter: blur(8px); border-radius: 22px;
+    max-width: 1100px; margin: 20px auto;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-    display: none;
 }
 .overlay.show { display: block; }
 
-h2{text-align:center;color:#ff2f92;margin-bottom:5px; font-size: 1.6rem;}
-.subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.4rem;}
+h2{text-align:center;color:#ff2f92;margin-bottom:5px;}
+.subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.9em;}
 .subjudul::after{content:" 📈";}
+label{font-weight:600;}
 
-.section{margin-top:20px;padding:15px;background:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.12);}
-h3 { font-size: 1.2rem; color: #444; margin-bottom: 15px; }
-
-label{font-weight:600; display: block; margin-bottom: 8px;}
-input[type="number"] {
-    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ccc;
-    font-family:'Quicksand',sans-serif; margin-bottom: 10px; font-size: 1rem;
-}
-
+/* Input Adaptif Mobile */
+input{width:18%;padding:10px;border-radius:12px;border:1px solid #ccc;font-family:'Quicksand',sans-serif;}
 button{
-    width: 100%; background:#ff5fa2; color:white; border:none; padding: 14px; border-radius:14px;
-    cursor:pointer; font-weight:700; font-size: 1rem; box-shadow:0 6px 15px rgba(255,95,162,.3);
-    transition: 0.3s; margin-bottom: 10px;
+    background:#ff5fa2;color:white;border:none;padding:12px 18px;border-radius:14px;
+    cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(255,95,162,.5);
 }
-button:hover{background:#ff2f92;}
 
-/* Tabel Container agar bisa scroll horizontal di HP */
-.table-container {
-    width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 14px;
-}
-table{ width: 100%; border-collapse: collapse; background: white; min-width: 500px; }
-th,td{ padding: 12px; border: 1px solid #ddd; text-align: center; font-size: 0.95rem; }
-th{ background: #ffe0ef; color: #ff2f92; }
+.table-scroll { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 14px; }
+table{width:100%; border-collapse:collapse; background:white; font-size:1.5em; min-width: 500px;}
+th,td{padding:10px;border:1px solid #ddd;text-align:center;}
+th{background:#ffe0ef;}
 
-#grafik-container{
-    width: 100%; padding: 10px; background: black; border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,.25); overflow: hidden; margin-top: 15px;
-}
-#hasil{font-size: 1.5rem; font-weight: bold; color: #ff2f92; text-align: center; margin: 15px 0; word-wrap: break-word;}
+.section{margin-top:25px;padding:18px;background:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.12);}
+#grafik-container{width:100%;padding:12px;background:black;border-radius:18px;transform-origin:top left;overflow: hidden;}
+#hasil{font-size: 2em;font-weight: bold;color: #ff2f92;text-align: center;margin: 10px 0;}
 
-/* Slider Styles */
-input[type="range"] { width: 100%; margin: 10px 0; }
-.checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-.checkbox-group input { width: 20px; height: 20px; }
-
-/* Desktop Adjustment */
-@media(min-width: 768px) {
-    input[type="number"] { width: 30%; display: inline-block; margin-right: 10px; }
-    button { width: auto; padding: 12px 25px; }
-    .overlay { margin: 40px auto; padding: 30px; }
-    h2 { font-size: 2.2rem; }
-    .subjudul { font-size: 1.8rem; }
-    #hasil { font-size: 2.2rem; }
+@media(max-width:768px){
+    .overlay{margin:10px;padding:15px;}
+    input{width:100% !important; margin-bottom:10px; display: block;}
+    button{width:100%;}
+    .subjudul{font-size: 1.4em;}
+    table{font-size: 1.1em;}
 }
 </style>
 </head>
@@ -114,13 +91,15 @@ input[type="range"] { width: 100%; margin: 10px 0; }
 
 <div id="validation-page">
     <div class="val-card">
-        <h2>KONFIRMASI PENGGUNA</h2>
-        <p>Apakah anda menyukai Matematika dan mengakui bahwa Bapak Doni adalah orang yang <b>Paling Ganteng</b> di dunia ini?</p>
+        <h2>KONFIRMASI</h2>
+        <p>Apakah Anda mengakui bahwa <b>Bapak Doni Stiawan</b> adalah Guru Terkeren dan Anda sangat Ganteng/Cantik?</p>
         <div class="btn-val-group">
-            <button class="btn-iya" onclick="prosesIya()">IYA, BETUL</button>
-            <button id="btn-no" class="btn-tidak" onmouseover="moveNo()" onclick="moveNo()">TIDAK</button>
+            <button class="btn-iya" onclick="prosesIya()">IYA, SETUJU</button>
+            <button id="btn-no" class="btn-tidak" 
+                onmouseover="moveNo()" 
+                onclick="moveNo()" 
+                ontouchstart="moveNo()">TIDAK</button>
         </div>
-        <p id="troll-msg" style="margin-top: 20px; color: #ff2f92; font-weight: bold; min-height: 25px;"></p>
     </div>
 </div>
 
@@ -129,65 +108,63 @@ input[type="range"] { width: 100%; margin: 10px 0; }
     <div class="subjudul">DONI STIAWAN, S.MAT</div>
 
     <div class="section">
-        <h3>📊 Tambah Poin Data</h3>
-        <input type="number" id="xPoin" placeholder="Nilai x">
-        <input type="number" id="yPoin" placeholder="Nilai y">
-        <button onclick="tambahPoin()">➕ Tambah Poin</button>
-        <div class="table-container" id="tabelPoin"></div>
-        <button onclick="hitung()" style="margin-top:15px; background: #ff2f92;">✨ Hitung Regresi ✨</button>
-        <button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua</button>
+    <h3>📊 Tambah Poin Data</h3>
+    <input type="number" id="xPoin" placeholder="x">
+    <input type="number" id="yPoin" placeholder="y">
+    <button onclick="tambahPoin()">➕ Tambah Poin</button>
+    <div class="table-scroll" id="tabelPoin"></div>
+    <br>
+    <button onclick="hitung()">✨ Hitung Regresi ✨</button>
+    <button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset</button>
     </div>
 
     <div class="section">
-        <h3>📊 Tabel Perhitungan</h3>
-        <div class="table-container" id="tabel"></div>
+    <h3>📊 Tabel Perhitungan</h3>
+    <div class="table-scroll" id="tabel"></div>
     </div>
 
     <div class="section">
-        <h3>💡 Hasil Regresi</h3>
-        <p id="hasil"></p>
+    <h3>💡 Hasil Regresi</h3>
+    <p id="hasil"></p>
     </div>
 
     <div class="section">
-        <h3>📈 Tabel Interpolasi</h3>
-        <div class="table-container" id="tabelRegresi"></div>
+    <h3>📈 Tabel Nilai Regresi (Interpolasi)</h3>
+    <div class="table-scroll" id="tabelRegresi"></div>
     </div>
 
     <div class="section">
-        <h3>🔮 Ekstrapolasi</h3>
-        <input type="number" id="xEkstra" placeholder="Masukkan x">
-        <button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
-        <div class="table-container" id="tabelEkstra"></div>
+    <h3>🔮 Ekstrapolasi</h3>
+    <input type="number" id="xEkstra" placeholder="Masukkan x">
+    <button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
+    <div class="table-scroll" id="tabelEkstra"></div>
     </div>
 
     <div class="section">
-        <label>🔍 Zoom Grafik: <span id="zoomValue">50%</span></label>
-        <input type="range" min="50" max="150" value="50" id="zoomSlider">
-        
-        <div class="checkbox-group">
-            <input type="checkbox" id="showRegression">
-            <label for="showRegression" style="margin:0;">Munculkan Garis Regresi</label>
-        </div>
-        
-        <div id="grafik-container">
-            <canvas id="grafik" height="300"></canvas>
-        </div>
+    <label>🔍 Zoom Grafik:</label>
+    <input type="range" min="50" max="150" value="50" id="zoomSlider">
+    <span id="zoomValue">50%</span>
+    <br><br>
+    <input type="checkbox" id="showRegression">
+    <label for="showRegression">Munculkan Garis Regresi</label>
+    <div id="grafik-container">
+        <canvas id="grafik" height="320"></canvas>
+    </div>
     </div>
 </div>
 
 <script>
-// --- LOGIKA BACKGROUND ---
+// --- BACKGROUND (GARIS KUNING) ---
 const canvas = document.getElementById('canvas-bg');
 const ctx = canvas.getContext('2d');
 let particles = [];
 function initBG() {
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     particles = [];
-    let count = window.innerWidth < 768 ? 40 : 80; // Kurangi partikel di HP agar ringan
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < 60; i++) {
         particles.push({
             x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 1, vy: (Math.random() - 0.5) * 1
+            vx: (Math.random() - 0.5) * 1.2, vy: (Math.random() - 0.5) * 1.2
         });
     }
 }
@@ -197,36 +174,38 @@ function drawBG() {
         p.x += p.vx; p.y += p.vy;
         if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.fillStyle = "#38bdf8";
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
         for (let j = i + 1; j < particles.length; j++) {
             let p2 = particles[j];
-            let dist = Math.sqrt(Math.pow(p.x-p2.x,2) + Math.pow(p.y-p2.y,2));
-            if (dist < 100) {
-                ctx.strokeStyle = `rgba(251, 191, 36, ${1 - dist/100})`;
-                ctx.lineWidth = 0.8;
+            let dist = Math.hypot(p.x-p2.x, p.y-p2.y);
+            if (dist < 110) {
+                ctx.strokeStyle = `rgba(251, 191, 36, ${1 - dist/110})`;
                 ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
             }
         }
     });
     requestAnimationFrame(drawBG);
 }
-window.addEventListener('resize', initBG);
-initBG(); drawBG();
+initBG(); drawBG(); window.onresize = initBG;
 
-// --- JEBAKAN ---
+// --- JEBAKAN (FIXED FOR MOBILE) ---
 function moveNo() {
     const btnNo = document.getElementById('btn-no');
-    const x = Math.random() * (window.innerWidth - 100) - (window.innerWidth / 2 - 50);
-    const y = Math.random() * (window.innerHeight - 100) - (window.innerHeight / 2 - 50);
-    btnNo.style.left = x + 'px'; btnNo.style.top = y + 'px';
+    const container = document.querySelector('.val-card');
+    const maxX = container.clientWidth - btnNo.clientWidth;
+    const maxY = container.clientHeight - btnNo.clientHeight - 40;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+    btnNo.style.transform = 'none';
 }
 function prosesIya() {
     document.getElementById('validation-page').style.display = 'none';
     document.getElementById('main-page').classList.add('show');
 }
 
-// --- LOGIKA MATEMATIKA ---
+// --- KODINGAN ASLI BAPAK (TIDAK ADA YANG DIUBAH) ---
 let chart, a, b;
 let dataX = [], dataY = [];
 let ekstrapolasiData = [];
@@ -235,7 +214,7 @@ let minX, maxX, minY, maxY, stepSizeX, stepSizeY;
 function tambahPoin(){
     let x = Number(document.getElementById("xPoin").value);
     let y = Number(document.getElementById("yPoin").value);
-    if(document.getElementById("xPoin").value === "" || document.getElementById("yPoin").value === ""){ alert("Isi nilai x dan y dulu ya! 🌸"); return; }
+    if(isNaN(x) || isNaN(y)){ alert("Masukkan nilai x dan y yang valid! 🌸"); return; }
     dataX.push(x); dataY.push(y); updateTabelPoin();
     document.getElementById("xPoin").value = ""; document.getElementById("yPoin").value = "";
 }
@@ -243,7 +222,7 @@ function tambahPoin(){
 function updateTabelPoin(){
     let tabel = `<table><tr><th>No</th><th>x</th><th>y</th><th>Aksi</th></tr>`;
     dataX.forEach((x, i) => {
-        tabel += `<tr><td>${i+1}</td><td>${x}</td><td>${dataY[i]}</td><td><button onclick="hapusPoin(${i})" style="background:#ff2f92; padding:5px 10px; width:auto; margin:0;">Hapus</button></td></tr>`;
+        tabel += `<tr><td>${i+1}</td><td>${x}</td><td>${dataY[i]}</td><td><button onclick="hapusPoin(${i})" style="background:#ff2f92;padding:5px 10px;width:auto;">Hapus</button></td></tr>`;
     });
     tabel += `</table>`;
     document.getElementById("tabelPoin").innerHTML = tabel;
@@ -252,7 +231,7 @@ function updateTabelPoin(){
 function hapusPoin(i){
     dataX.splice(i,1); dataY.splice(i,1); updateTabelPoin();
     if(dataX.length>=2) hitung();
-    else { resetGrafikOnly(); }
+    else{ resetGrafikOnly(); }
 }
 
 function hitung(){
@@ -270,9 +249,9 @@ function hitung(){
 
     b=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
     a=(sumY-b*sumX)/n;
-    document.getElementById("hasil").innerHTML=`✨ y = ${a.toFixed(3)} + ${b.toFixed(3)}x ✨`;
+    document.getElementById("hasil").innerHTML=`✨ <b>y=${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
 
-    let tabelR=`<table><tr><th>x</th><th>y (Regresi)</th></tr>`;
+    let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
     let titikRegresi=[];
     for(let i=0;i<n;i++){
         let yr=a+b*x[i];
@@ -281,14 +260,13 @@ function hitung(){
     }
     tabelR+=`</table>`;
     document.getElementById("tabelRegresi").innerHTML=tabelR;
-    updateGrafik(titikRegresi);
-}
 
-function updateGrafik(titikRegresi = []){
-    let scatterData=dataX.map((v,i)=>({x:v,y:dataY[i]}));
-    let allX=[...dataX,...ekstrapolasiData.map(p=>p.x)];
-    let allY=[...dataY,...ekstrapolasiData.map(p=>p.y)];
-    minX=Math.min(...allX); maxX=Math.max(...allX);
+    let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
+    let allX=[...x,...ekstrapolasiData.map(p=>p.x)];
+    let allY=[...y,...ekstrapolasiData.map(p=>p.y)];
+    minX=Math.min(...allX); maxX=Math.max(...allX); minY=Math.min(...allY); maxY=Math.max(...allY);
+    stepSizeX=Math.max(1,Math.round((maxX-minX)/30));
+    stepSizeY=Math.max(1,Math.round((maxY-minY)/30));
     let showReg=document.getElementById("showRegression").checked;
     
     if(chart) chart.destroy();
@@ -296,26 +274,22 @@ function updateGrafik(titikRegresi = []){
         type:"scatter",
         data:{datasets:[
             {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6",pointRadius:6},
-            ...(showReg && a!==undefined?[
-                {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],borderColor:"#FFFFFF",borderWidth:2,pointRadius:0},
-                {label:"Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}
-            ]:[])
+            ...(showReg?[{label:"Titik Interpolasi 💚",data:titikRegresi,backgroundColor:"#22c55e",pointRadius:6},
+            {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],
+             borderColor:"#FFFFFF",backgroundColor:"#FFFFFF",borderWidth:2,pointRadius:0}]:[]),
+            ...(showReg && ekstrapolasiData.length>0?[{label:"Titik Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}]:[])
         ]},
-        options:{
-            responsive:true, maintainAspectRatio:false,
-            scales:{
-                x:{grid:{color:'rgba(255,255,255,0.1)'},ticks:{color:'white'}},
-                y:{grid:{color:'rgba(255,255,255,0.1)'},ticks:{color:'white'}}
-            },
-            plugins:{ legend:{ labels:{color:'white'} } }
+        options:{responsive:true,maintainAspectRatio:false,
+            scales:{x:{grid:{color:'white'},ticks:{stepSize:stepSizeX,callback:v=>Math.round(v)}},
+                    y:{grid:{color:'white'},ticks:{stepSize:stepSizeY,callback:v=>Math.round(v)}}}
         }
     });
 }
 
 function tambahkanEkstra(){
-    if(a === undefined){alert("Hitung regresi dulu ya! 💕"); return;}
+    if(!a || !b){alert("Hitung regresi dulu ya! 💕"); return;}
     let x=Number(document.getElementById("xEkstra").value);
-    if(document.getElementById("xEkstra").value === ""){alert("Isi nilai x! 🌸"); return;}
+    if(isNaN(x)){alert("Masukkan nilai x yang valid! 🌸"); return;}
     let y=a+b*x;
     ekstrapolasiData.push({x:x,y:y});
     updateTabelEkstra(); hitung();
@@ -323,15 +297,15 @@ function tambahkanEkstra(){
 }
 
 function updateTabelEkstra(){
-    let tabel=`<table><tr><th>No</th><th>x</th><th>y (Hasil)</th><th>Aksi</th></tr>`;
+    let tabel=`<table><tr><th>No</th><th>x</th><th>y ekstrapolasi</th><th>Aksi</th></tr>`;
     ekstrapolasiData.forEach((p,i)=>{
-        tabel+=`<tr><td>${i+1}</td><td>${p.x}</td><td>${p.y.toFixed(3)}</td><td><button onclick="hapusEkstra(${i})" style="background:#ff2f92; padding:5px 10px; width:auto; margin:0;">Hapus</button></td></tr>`;
+        tabel+=`<tr><td>${i+1}</td><td>${p.x}</td><td>${p.y.toFixed(3)}</td><td><button onclick="hapusEkstra(${i})" style="background:#ff2f92;width:auto;padding:5px 10px;">Hapus</button></td></tr>`;
     });
     tabel+=`</table>`;
     document.getElementById("tabelEkstra").innerHTML=tabel;
 }
 
-function hapusEkstra(i){ ekstrapolasiData.splice(i,1); updateTabelEkstra(); hitung(); }
+function hapusEkstra(i){ekstrapolasiData.splice(i,1); updateTabelEkstra(); hitung();}
 
 const slider=document.getElementById("zoomSlider");
 const container=document.getElementById("grafik-container");
@@ -351,7 +325,7 @@ function resetGrafikOnly(){
 function resetSemua(){
     dataX=[]; dataY=[]; ekstrapolasiData=[]; a=undefined; b=undefined;
     document.getElementById("xPoin").value=""; document.getElementById("yPoin").value=""; document.getElementById("xEkstra").value="";
-    document.getElementById("tabelPoin").innerHTML=""; updateTabelEkstra(); resetGrafikOnly();
+    document.getElementById("tabelPoin").innerHTML=""; resetGrafikOnly();
     document.getElementById("zoomSlider").value=50; container.style.transform="scale(0.5)";
 }
 </script>

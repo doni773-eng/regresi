@@ -16,7 +16,7 @@ body, html {
     background-color: #050a14; color: #333; overflow-x: hidden;
 }
 
-/* --- BACKGROUND PARTIKEL (Gaya Kombinatorik) --- */
+/* --- BACKGROUND PARTIKEL --- */
 #canvas-bg {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -30,71 +30,81 @@ body, html {
     display: flex; justify-content: center; align-items: center; text-align: center;
 }
 .val-card {
-    background: rgba(15, 23, 42, 0.95); padding: 40px; border-radius: 20px;
+    background: rgba(15, 23, 42, 0.95); padding: 30px; border-radius: 20px;
     border: 2px solid #ff2f92; max-width: 450px; width: 90%;
     box-shadow: 0 0 30px rgba(255, 47, 146, 0.4);
     z-index: 2001;
 }
-.val-card h2 { color: #ff2f92; margin-bottom: 20px; }
-.val-card p { color: white; font-size: 1.1rem; }
+.val-card h2 { color: #ff2f92; margin-bottom: 20px; font-size: 1.5rem; }
+.val-card p { color: white; font-size: 1rem; line-height: 1.5; }
 .btn-val-group {
-    display: flex; justify-content: center; gap: 20px; margin-top: 30px;
+    display: flex; justify-content: center; gap: 15px; margin-top: 30px;
     position: relative; min-height: 60px;
 }
-.btn-iya { background: #ff2f92; color: white; padding: 12px 25px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
-.btn-tidak { background: #475569; color: white; padding: 12px 25px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; position: absolute; transition: 0.2s ease; }
+.btn-iya { background: #ff2f92; color: white; padding: 12px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+.btn-tidak { background: #475569; color: white; padding: 12px 20px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; position: absolute; transition: 0.2s ease; }
 
-/* --- MAIN PAGE STYLES (SESUAI KODINGAN ASLI BAPAK) --- */
+/* --- MAIN PAGE STYLES --- */
 .overlay {
     position: relative; z-index: 10;
-    min-height: 100vh; padding: 20px;
+    min-height: 100vh; padding: 15px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
     border-radius: 22px;
     max-width: 1100px;
-    margin: 20px auto;
+    margin: 15px auto;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-    display: none; /* Hidden initially */
+    display: none;
 }
 .overlay.show { display: block; }
 
-h2{text-align:center;color:#ff2f92;margin-bottom:5px;}
-.subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.9em;}
+h2{text-align:center;color:#ff2f92;margin-bottom:5px; font-size: 1.6rem;}
+.subjudul{text-align:center;font-weight:bold;margin-bottom:25px;font-size:1.4rem;}
 .subjudul::after{content:" 📈";}
-label{font-weight:600;}
-input{width:18%;padding:10px;border-radius:12px;border:1px solid #ccc;font-family:'Quicksand',sans-serif;}
+
+.section{margin-top:20px;padding:15px;background:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.12);}
+h3 { font-size: 1.2rem; color: #444; margin-bottom: 15px; }
+
+label{font-weight:600; display: block; margin-bottom: 8px;}
+input[type="number"] {
+    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ccc;
+    font-family:'Quicksand',sans-serif; margin-bottom: 10px; font-size: 1rem;
+}
 
 button{
-    background:#ff5fa2;color:white;border:none;padding:12px 18px;border-radius:14px;
-    cursor:pointer;font-weight:700;box-shadow:0 6px 15px rgba(255,95,162,.5);
-    transition: background 0.3s;
+    width: 100%; background:#ff5fa2; color:white; border:none; padding: 14px; border-radius:14px;
+    cursor:pointer; font-weight:700; font-size: 1rem; box-shadow:0 6px 15px rgba(255,95,162,.3);
+    transition: 0.3s; margin-bottom: 10px;
 }
 button:hover{background:#ff2f92;}
 
-table{width:100%;border-collapse:collapse;margin-top:15px;background:white;border-radius:14px;overflow:hidden;font-size:1.5em;}
-th,td{padding:10px;border:1px solid #ddd;text-align:center;}
-th{background:#ffe0ef;font-size:1.2em;}
-.section{margin-top:25px;padding:18px;background:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.12);}
+/* Tabel Container agar bisa scroll horizontal di HP */
+.table-container {
+    width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 14px;
+}
+table{ width: 100%; border-collapse: collapse; background: white; min-width: 500px; }
+th,td{ padding: 12px; border: 1px solid #ddd; text-align: center; font-size: 0.95rem; }
+th{ background: #ffe0ef; color: #ff2f92; }
 
-/* KEMBALI KE ASLI BAPAK: */
-#grafik-container{width:100%;padding:12px;background:black;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.25);transform-origin:top left;overflow: hidden;}
-#hasil{font-size: 2em;font-weight: bold;color: #ff2f92;text-align: center;margin: 10px 0;}
+#grafik-container{
+    width: 100%; padding: 10px; background: black; border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25); overflow: hidden; margin-top: 15px;
+}
+#hasil{font-size: 1.5rem; font-weight: bold; color: #ff2f92; text-align: center; margin: 15px 0; word-wrap: break-word;}
 
-@media(max-width:768px){
-    .overlay{margin:10px;padding:15px;}
-    h2{font-size:1.4em;}
-    .subjudul{font-size:1.5em;}
-    input{width:100%;margin-bottom:10px;font-size:18px;display: block;}
-    button{width:100%;padding:18px;font-size:1.2em;}
-    table{font-size:1.4em;overflow-x:auto;display:block;white-space:nowrap;}
-    th,td{padding:12px;}
-    .section{padding:20px;}
-    #grafik-container{padding:10px;}
-    .section input[type="number"]{display:block;width:100%;margin-bottom:10px;}
-    .section button{margin-top:10px;}
-    input[type="range"]{width:100%;height:10px;}
-    label[for="showRegression"]{display:block;margin-top:10px;font-size:1.1em;}
-    #hasil{font-size:1.8em;}
+/* Slider Styles */
+input[type="range"] { width: 100%; margin: 10px 0; }
+.checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.checkbox-group input { width: 20px; height: 20px; }
+
+/* Desktop Adjustment */
+@media(min-width: 768px) {
+    input[type="number"] { width: 30%; display: inline-block; margin-right: 10px; }
+    button { width: auto; padding: 12px 25px; }
+    .overlay { margin: 40px auto; padding: 30px; }
+    h2 { font-size: 2.2rem; }
+    .subjudul { font-size: 1.8rem; }
+    #hasil { font-size: 2.2rem; }
 }
 </style>
 </head>
@@ -105,7 +115,7 @@ th{background:#ffe0ef;font-size:1.2em;}
 <div id="validation-page">
     <div class="val-card">
         <h2>KONFIRMASI PENGGUNA</h2>
-        <p>Apakah Anda menyukai matematika dan mengakui bahwa Bapak Doni adalah orang yang <b>Paling Ganteng ?</b> di dunia ini?</p>
+        <p>Apakah Anda mengakui bahwa Anda adalah orang yang <b>Paling Ganteng / Cantik</b> di dunia ini?</p>
         <div class="btn-val-group">
             <button class="btn-iya" onclick="prosesIya()">IYA, BETUL</button>
             <button id="btn-no" class="btn-tidak" onmouseover="moveNo()" onclick="moveNo()">TIDAK</button>
@@ -119,64 +129,62 @@ th{background:#ffe0ef;font-size:1.2em;}
     <div class="subjudul">DONI STIAWAN, S.MAT</div>
 
     <div class="section">
-    <h3>📊 Tambah Poin Data</h3>
-    <input type="number" id="xPoin" placeholder="Masukkan nilai x">
-    <input type="number" id="yPoin" placeholder="Masukkan y">
-    <br><br>
-    <button onclick="tambahPoin()">➕ Tambah Poin</button>
-    <div id="tabelPoin"></div>
-    <br>
-    <button onclick="hitung()">✨ Hitung Regresi ✨</button>
-    <br><br>
-    <button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua Data</button>
+        <h3>📊 Tambah Poin Data</h3>
+        <input type="number" id="xPoin" placeholder="Nilai x">
+        <input type="number" id="yPoin" placeholder="Nilai y">
+        <button onclick="tambahPoin()">➕ Tambah Poin</button>
+        <div class="table-container" id="tabelPoin"></div>
+        <button onclick="hitung()" style="margin-top:15px; background: #ff2f92;">✨ Hitung Regresi ✨</button>
+        <button onclick="resetSemua()" style="background:#6b7280;">🔄 Reset Semua</button>
     </div>
 
     <div class="section">
-    <h3>📊 Tabel Perhitungan</h3>
-    <div id="tabel"></div>
+        <h3>📊 Tabel Perhitungan</h3>
+        <div class="table-container" id="tabel"></div>
     </div>
 
     <div class="section">
-    <h3>💡 Hasil Regresi</h3>
-    <p id="hasil"></p>
+        <h3>💡 Hasil Regresi</h3>
+        <p id="hasil"></p>
     </div>
 
     <div class="section">
-    <h3>📈 Tabel Nilai Regresi (Interpolasi)</h3>
-    <div id="tabelRegresi"></div>
+        <h3>📈 Tabel Interpolasi</h3>
+        <div class="table-container" id="tabelRegresi"></div>
     </div>
 
     <div class="section">
-    <h3>🔮 Ekstrapolasi</h3>
-    <input type="number" id="xEkstra" placeholder="Masukkan x">
-    <br><br>
-    <button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
-    <div id="tabelEkstra"></div>
+        <h3>🔮 Ekstrapolasi</h3>
+        <input type="number" id="xEkstra" placeholder="Masukkan x">
+        <button onclick="tambahkanEkstra()">➕ Tambah Ekstrapolasi</button>
+        <div class="table-container" id="tabelEkstra"></div>
     </div>
 
     <div class="section">
-    <label>🔍 Zoom Grafik:</label>
-    <input type="range" min="50" max="150" value="50" id="zoomSlider">
-    <span id="zoomValue">50%</span>
-    <br><br>
-    <input type="checkbox" id="showRegression">
-    <label for="showRegression">Munculkan Garis Regresi</label>
-    <br><br>
-    <div id="grafik-container">
-        <canvas id="grafik" height="320"></canvas>
-    </div>
+        <label>🔍 Zoom Grafik: <span id="zoomValue">50%</span></label>
+        <input type="range" min="50" max="150" value="50" id="zoomSlider">
+        
+        <div class="checkbox-group">
+            <input type="checkbox" id="showRegression">
+            <label for="showRegression" style="margin:0;">Munculkan Garis Regresi</label>
+        </div>
+        
+        <div id="grafik-container">
+            <canvas id="grafik" height="300"></canvas>
+        </div>
     </div>
 </div>
 
 <script>
-// --- LOGIKA BACKGROUND (Garis Kuning) ---
+// --- LOGIKA BACKGROUND ---
 const canvas = document.getElementById('canvas-bg');
 const ctx = canvas.getContext('2d');
 let particles = [];
 function initBG() {
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     particles = [];
-    for (let i = 0; i < 80; i++) {
+    let count = window.innerWidth < 768 ? 40 : 80; // Kurangi partikel di HP agar ringan
+    for (let i = 0; i < count; i++) {
         particles.push({
             x: Math.random() * canvas.width, y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 1, vy: (Math.random() - 0.5) * 1
@@ -194,8 +202,8 @@ function drawBG() {
         for (let j = i + 1; j < particles.length; j++) {
             let p2 = particles[j];
             let dist = Math.sqrt(Math.pow(p.x-p2.x,2) + Math.pow(p.y-p2.y,2));
-            if (dist < 120) {
-                ctx.strokeStyle = `rgba(251, 191, 36, ${1 - dist/120})`;
+            if (dist < 100) {
+                ctx.strokeStyle = `rgba(251, 191, 36, ${1 - dist/100})`;
                 ctx.lineWidth = 0.8;
                 ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
             }
@@ -209,8 +217,8 @@ initBG(); drawBG();
 // --- JEBAKAN ---
 function moveNo() {
     const btnNo = document.getElementById('btn-no');
-    const x = Math.random() * (window.innerWidth - 150) - (window.innerWidth / 2 - 75);
-    const y = Math.random() * (window.innerHeight - 150) - (window.innerHeight / 2 - 75);
+    const x = Math.random() * (window.innerWidth - 100) - (window.innerWidth / 2 - 50);
+    const y = Math.random() * (window.innerHeight - 100) - (window.innerHeight / 2 - 50);
     btnNo.style.left = x + 'px'; btnNo.style.top = y + 'px';
 }
 function prosesIya() {
@@ -218,7 +226,7 @@ function prosesIya() {
     document.getElementById('main-page').classList.add('show');
 }
 
-// --- KODINGAN ASLI BAPAK ---
+// --- LOGIKA MATEMATIKA ---
 let chart, a, b;
 let dataX = [], dataY = [];
 let ekstrapolasiData = [];
@@ -227,7 +235,7 @@ let minX, maxX, minY, maxY, stepSizeX, stepSizeY;
 function tambahPoin(){
     let x = Number(document.getElementById("xPoin").value);
     let y = Number(document.getElementById("yPoin").value);
-    if(isNaN(x) || isNaN(y)){ alert("Masukkan nilai x dan y yang valid! 🌸"); return; }
+    if(document.getElementById("xPoin").value === "" || document.getElementById("yPoin").value === ""){ alert("Isi nilai x dan y dulu ya! 🌸"); return; }
     dataX.push(x); dataY.push(y); updateTabelPoin();
     document.getElementById("xPoin").value = ""; document.getElementById("yPoin").value = "";
 }
@@ -235,7 +243,7 @@ function tambahPoin(){
 function updateTabelPoin(){
     let tabel = `<table><tr><th>No</th><th>x</th><th>y</th><th>Aksi</th></tr>`;
     dataX.forEach((x, i) => {
-        tabel += `<tr><td>${i+1}</td><td>${x}</td><td>${dataY[i]}</td><td><button onclick="hapusPoin(${i})" style="background:#ff2f92;color:white;border:none;padding:5px 10px;border-radius:5px;">Hapus</button></td></tr>`;
+        tabel += `<tr><td>${i+1}</td><td>${x}</td><td>${dataY[i]}</td><td><button onclick="hapusPoin(${i})" style="background:#ff2f92; padding:5px 10px; width:auto; margin:0;">Hapus</button></td></tr>`;
     });
     tabel += `</table>`;
     document.getElementById("tabelPoin").innerHTML = tabel;
@@ -244,11 +252,7 @@ function updateTabelPoin(){
 function hapusPoin(i){
     dataX.splice(i,1); dataY.splice(i,1); updateTabelPoin();
     if(dataX.length>=2) hitung();
-    else{
-        document.getElementById("tabel").innerHTML=""; document.getElementById("tabelRegresi").innerHTML="";
-        document.getElementById("hasil").innerHTML=""; ekstrapolasiData=[]; updateTabelEkstra();
-        if(chart){chart.destroy(); chart=null;}
-    }
+    else { resetGrafikOnly(); }
 }
 
 function hitung(){
@@ -266,9 +270,9 @@ function hitung(){
 
     b=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
     a=(sumY-b*sumX)/n;
-    document.getElementById("hasil").innerHTML=`✨ <b>y=${a.toFixed(3)} + ${b.toFixed(3)}x</b> ✨`;
+    document.getElementById("hasil").innerHTML=`✨ y = ${a.toFixed(3)} + ${b.toFixed(3)}x ✨`;
 
-    let tabelR=`<table><tr><th>x</th><th>y hasil regresi</th></tr>`;
+    let tabelR=`<table><tr><th>x</th><th>y (Regresi)</th></tr>`;
     let titikRegresi=[];
     for(let i=0;i<n;i++){
         let yr=a+b*x[i];
@@ -277,79 +281,78 @@ function hitung(){
     }
     tabelR+=`</table>`;
     document.getElementById("tabelRegresi").innerHTML=tabelR;
+    updateGrafik(titikRegresi);
+}
 
-    let scatterData=x.map((v,i)=>({x:v,y:y[i]}));
-    let allX=[...x,...ekstrapolasiData.map(p=>p.x)];
-    let allY=[...y,...ekstrapolasiData.map(p=>p.y)];
-    minX=Math.min(...allX); maxX=Math.max(...allX); minY=Math.min(...allY); maxY=Math.max(...allY);
-    stepSizeX=Math.max(1,Math.round((maxX-minX)/30));
-    stepSizeY=Math.max(1,Math.round((maxY-minY)/30));
+function updateGrafik(titikRegresi = []){
+    let scatterData=dataX.map((v,i)=>({x:v,y:dataY[i]}));
+    let allX=[...dataX,...ekstrapolasiData.map(p=>p.x)];
+    let allY=[...dataY,...ekstrapolasiData.map(p=>p.y)];
+    minX=Math.min(...allX); maxX=Math.max(...allX);
     let showReg=document.getElementById("showRegression").checked;
+    
     if(chart) chart.destroy();
     chart=new Chart(document.getElementById("grafik"),{
         type:"scatter",
         data:{datasets:[
             {label:"Data Asli 💙",data:scatterData,backgroundColor:"#3b82f6",pointRadius:6},
-            ...(showReg?[{label:"Titik Interpolasi 💚",data:titikRegresi,backgroundColor:"#22c55e",pointRadius:6},
-            {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],
-             borderColor:"#FFFFFF",backgroundColor:"#FFFFFF",borderWidth:2,pointRadius:0}]:[]),
-            ...(showReg && ekstrapolasiData.length>0?[{label:"Titik Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}]:[])
+            ...(showReg && a!==undefined?[
+                {label:"Garis Regresi 🤍",type:"line",data:[{x:minX,y:a+b*minX},{x:maxX,y:a+b*maxX}],borderColor:"#FFFFFF",borderWidth:2,pointRadius:0},
+                {label:"Ekstrapolasi 💛",data:ekstrapolasiData,backgroundColor:"#FFFF00",pointRadius:6}
+            ]:[])
         ]},
-        options:{responsive:true,maintainAspectRatio:false,
-            scales:{x:{grid:{color:'white'},ticks:{stepSize:stepSizeX,callback:v=>Math.round(v)}},
-                    y:{grid:{color:'white'},ticks:{stepSize:stepSizeY,callback:v=>Math.round(v)}}}
+        options:{
+            responsive:true, maintainAspectRatio:false,
+            scales:{
+                x:{grid:{color:'rgba(255,255,255,0.1)'},ticks:{color:'white'}},
+                y:{grid:{color:'rgba(255,255,255,0.1)'},ticks:{color:'white'}}
+            },
+            plugins:{ legend:{ labels:{color:'white'} } }
         }
     });
 }
 
 function tambahkanEkstra(){
-    if(!a || !b){alert("Hitung regresi dulu ya! 💕"); return;}
+    if(a === undefined){alert("Hitung regresi dulu ya! 💕"); return;}
     let x=Number(document.getElementById("xEkstra").value);
-    if(isNaN(x)){alert("Masukkan nilai x yang valid! 🌸"); return;}
+    if(document.getElementById("xEkstra").value === ""){alert("Isi nilai x! 🌸"); return;}
     let y=a+b*x;
     ekstrapolasiData.push({x:x,y:y});
     updateTabelEkstra(); hitung();
     document.getElementById("xEkstra").value="";
 }
 
-function hapusEkstra(i){ekstrapolasiData.splice(i,1); updateTabelEkstra(); hitung();}
-
 function updateTabelEkstra(){
-    let tabel=`<table><tr><th>No</th><th>x</th><th>y hasil ekstrapolasi</th><th>Aksi</th></tr>`;
+    let tabel=`<table><tr><th>No</th><th>x</th><th>y (Hasil)</th><th>Aksi</th></tr>`;
     ekstrapolasiData.forEach((p,i)=>{
-        tabel+=`<tr><td>${i+1}</td><td>${p.x}</td><td>${p.y.toFixed(3)}</td><td><button onclick="hapusEkstra(${i})" style="background:#ff2f92;color:white;border:none;padding:5px 10px;border-radius:5px;">Hapus</button></td></tr>`;
+        tabel+=`<tr><td>${i+1}</td><td>${p.x}</td><td>${p.y.toFixed(3)}</td><td><button onclick="hapusEkstra(${i})" style="background:#ff2f92; padding:5px 10px; width:auto; margin:0;">Hapus</button></td></tr>`;
     });
     tabel+=`</table>`;
     document.getElementById("tabelEkstra").innerHTML=tabel;
 }
 
+function hapusEkstra(i){ ekstrapolasiData.splice(i,1); updateTabelEkstra(); hitung(); }
+
 const slider=document.getElementById("zoomSlider");
 const container=document.getElementById("grafik-container");
-const zoomValue=document.getElementById("zoomValue");
-
 slider.oninput=()=>{
-    let s=slider.value/100;
-    container.style.transform=`scale(${s})`;
-    zoomValue.innerText=slider.value+"%";
-    if(chart && minX!==undefined && maxX!==undefined && minY!==undefined && maxY!==undefined){
-        let zoomFactor=s*3;
-        chart.options.scales.x.ticks.stepSize=Math.max(1,Math.round(stepSizeX/zoomFactor));
-        chart.options.scales.y.ticks.stepSize=Math.max(1,Math.round(stepSizeY/zoomFactor));
-        chart.update();
-    }
+    container.style.transform=`scale(${slider.value/100})`;
+    document.getElementById("zoomValue").innerText=slider.value+"%";
 };
 
 document.getElementById("showRegression").addEventListener("change",hitung);
 
+function resetGrafikOnly(){
+    document.getElementById("tabel").innerHTML=""; document.getElementById("tabelRegresi").innerHTML="";
+    document.getElementById("hasil").innerHTML=""; ekstrapolasiData=[]; updateTabelEkstra();
+    if(chart){chart.destroy(); chart=null;}
+}
+
 function resetSemua(){
     dataX=[]; dataY=[]; ekstrapolasiData=[]; a=undefined; b=undefined;
     document.getElementById("xPoin").value=""; document.getElementById("yPoin").value=""; document.getElementById("xEkstra").value="";
-    document.getElementById("tabelPoin").innerHTML=""; document.getElementById("tabel").innerHTML="";
-    document.getElementById("tabelRegresi").innerHTML=""; document.getElementById("tabelEkstra").innerHTML="";
-    document.getElementById("hasil").innerHTML=""; document.getElementById("showRegression").checked=false;
-    document.getElementById("zoomSlider").value=50; document.getElementById("zoomValue").innerText="50%";
-    container.style.transform="scale(0.5)";
-    if(chart){chart.destroy(); chart=null;}
+    document.getElementById("tabelPoin").innerHTML=""; updateTabelEkstra(); resetGrafikOnly();
+    document.getElementById("zoomSlider").value=50; container.style.transform="scale(0.5)";
 }
 </script>
 </body>

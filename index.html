@@ -92,7 +92,7 @@ th{background:#ffe0ef;}
 <div id="validation-page">
     <div class="val-card">
         <h2>KONFIRMASI</h2>
-        <p>Apakah anda menyukai matematika dan mengakui bahwa <b>Bapak Doni Stiawan</b> adalah Guru Terkeren dan Ganteng?😂</p>
+        <p>Apakah benar kelas xi mipa terkeren?</p>
         <div class="btn-val-group">
             <button class="btn-iya" onclick="prosesIya()">IYA, SETUJU</button>
             <button id="btn-no" class="btn-tidak" 
@@ -286,13 +286,25 @@ function hitung(){
 }
 
 function tambahkanEkstra(){
-    if(!a || !b){alert("Hitung regresi dulu ya! 💕"); return;}
-    let x=Number(document.getElementById("xEkstra").value);
-    if(isNaN(x)){alert("Masukkan nilai x yang valid! 🌸"); return;}
-    let y=a+b*x;
-    ekstrapolasiData.push({x:x,y:y});
-    updateTabelEkstra(); hitung();
-    document.getElementById("xEkstra").value="";
+    if(a === undefined || b === undefined){
+        alert("Hitung regresi dulu ya! 💕");
+        return;
+    }
+
+    let x = Number(document.getElementById("xEkstra").value);
+    if(isNaN(x)){
+        alert("Masukkan nilai x yang valid! 🌸");
+        return;
+    }
+
+    let y = a + b * x;
+
+    ekstrapolasiData.push({ x: x, y: y });
+
+    updateTabelEkstra();
+    hitung();
+
+    document.getElementById("xEkstra").value = "";
 }
 
 function updateTabelEkstra(){
